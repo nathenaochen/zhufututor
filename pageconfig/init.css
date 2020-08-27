@@ -1,0 +1,34 @@
+html,body{
+  width: 100%;
+  height: 100%;
+  line-height: unset !important;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  background-color: #fff;
+  -webkit-tap-highlight-color: transparent;
+  font-family: Tahoma, Arial, \5b84\4f53, sans-serif; 
+}
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: 0;
+  list-style-type: none;
+  user-select: none;
+}
+button,input,a,textarea{
+  outline: none;
+  border: none;
+  background: none;
+  text-decoration: none;
+}
+:global(#root){
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  max-width: 750px;
+  overflow: hidden;
+}
