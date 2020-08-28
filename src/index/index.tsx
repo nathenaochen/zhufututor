@@ -24,7 +24,7 @@ function Index(){
       <div className={styles['cart-container']}>
         <div className={styles.content}>
           {
-            [1,2,3,4,5,6,7,8,9,0].map(()=>{
+            [1,2,3,4,5,6,7,8].map(()=>{
               return (
                 <Cart />
               )
