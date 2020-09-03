@@ -8,6 +8,18 @@ const pages = [
     {
         'title':'首页',
         'pageName': 'index'
+    },
+    {
+      'title':'消息列表',
+      'pageName': 'message'
+    },
+    {
+      'title':'我的',
+      'pageName': 'me'
+    },
+    {
+      'title':'教师详情页',
+      'pageName': 'teacher-detial'
     }
 ]
 

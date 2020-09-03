@@ -20,7 +20,7 @@ const baseConfig = {
     },
     externals:{
         "react":'React',
-        "react-dom":'ReactDOM'
+        "react-dom":'ReactDOM',
       },
     module:{
         rules:[
