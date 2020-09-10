@@ -11,7 +11,6 @@ function Hoc(WrapComponent: React.ComponentType<globalData>){
   return () => {
 
     new Vconsole();
-
     return (
       <WrapComponent a={1} b={'23'}/>
     )

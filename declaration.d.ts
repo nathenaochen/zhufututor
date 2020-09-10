@@ -6,3 +6,5 @@ declare module '*.less'{
 
 declare module '*.jpg'; //图片jpg模块 ，使用import img from './hello.jpg';时让编辑器不报错
 declare module '*.png';
+
+declare var JSSDK:any;

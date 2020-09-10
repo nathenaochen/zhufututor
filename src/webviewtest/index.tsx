@@ -15,11 +15,11 @@ function WebViewTest(){
     return 'lalalal'
   }
 
-  async function CallFlutter_1(msg,cb){
-    console.log(Toaster);
-    const res = await Toaster.postMessage(msg);
-    // console.log(res,'flutter');
-  }
+  // async function CallFlutter_1(msg,cb){
+  //   console.log(Toaster);
+  //   const res = await Toaster.postMessage(msg);
+  //   // console.log(res,'flutter');
+  // }
 
   //测试jssdk
   async function testJssdk(){

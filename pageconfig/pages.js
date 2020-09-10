@@ -20,6 +20,14 @@ const pages = [
     {
       'title':'教师详情页',
       'pageName': 'teacher-detial'
+    },
+    {
+      'title':'设置',
+      'pageName': 'setting'
+    },
+    {
+      'title':'Jssdk Test',
+      'pageName': 'webviewtest'
     }
 ]
 

@@ -6,7 +6,7 @@ export default function Cart(){
 
 
   function gotoDetail(){console.log('222');
-    (window as any).JSSDK.openWebview({url:'http://39.99.174.23/zhifututor/build/teacher-detial.html',title:''})
+    (window as any).JSSDK.openWebview({url:'http://39.99.174.23/zhifututor/build/teacher-detial.html',title:''});
   }
 
 
