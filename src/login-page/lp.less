@@ -1,0 +1,88 @@
+.login-type{
+  margin-bottom: 100px;
+  display: flex;
+  justify-content: center;
+  color: #8a8a8a;
+  font-size: 36px;
+}
+
+.login-box{
+  margin: 200px auto;
+
+  .login-item{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 50px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    span{
+      // border: 1px solid blue;/**no**/
+      height: 40px;
+      width: 40px;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+    }
+    input{
+      // border: 1px solid red;/**no**/
+      width: 540px;
+      height: 30px;
+      line-height: 30px;
+      font-size: 32px;
+      padding-top: 10px;
+    }
+  }
+
+ ul{
+  >li:nth-child(1){
+    margin-bottom: 40px;
+    >span:nth-child(1){
+      background-image: url('./images/user.png');
+      margin-right: 20px;
+    }
+    >span:nth-child(3){
+      background-image: url('./images/delete.png');
+    }
+  }
+
+  >li:nth-child(2){
+    >span:nth-child(1){
+      background-image: url('./images/password.png');
+      margin-right: 20px;
+    }
+    >span:nth-child(3){
+      background-image: url('./images/seeable.png');
+    }
+  }
+ }
+}
+
+.options{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 50px;
+  color: #4CB050;
+}
+
+.button-box{
+    width: 480px;
+    margin: 180px auto 10px;
+    display: flex;
+    flex-direction: column;
+  .login-button{
+    text-align: center;
+    font-size: 32px;
+    padding: 20px 0;
+    border-radius: 40px;
+    color: #fff;
+    &.first{
+      margin-bottom: 20px;
+      background-color: #4CB050;
+    }
+    &.second{
+      border: 1px solid #4CB050;/**no**/
+      color: #4CB050;
+    }
+  }
+}

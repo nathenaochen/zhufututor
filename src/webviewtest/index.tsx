@@ -1,9 +1,11 @@
-import React, {useEffect} from 'react';
+import React, {useEffect,useState} from 'react';
 import ReactDOM from 'react-dom';
 import styles from './wt.less'
 import Vconsole from 'vconsole';
 
 function WebViewTest(){
+
+  const [testUrl,setTestUrl] = useState('http://39.99.174.23/zhifututor/build/login-page.html');
 
   useEffect(()=>{
     new Vconsole();
@@ -36,7 +38,8 @@ function WebViewTest(){
       {/* <button onClick={}>Flutter 调用 js</button> */}
       <button onClick={()=>{testJssdk()}}>js 调用 Flutter</button>
       <button onClick={()=>{JSSDK.setTitle({title:'js设置的标题',navBarColor:'#FFB6C1'});}}>设置title</button>
-      <button onClick={()=>{JSSDK.openWebview({url:'https://www.baidu.com/',title:'new webview'})}}>打开新的webview</button>
+      <input type="text" onChange={(e)=>{setTestUrl(e.target.value)}} placeholder='http://39.99.174.23/zhifututor/build/login-page.html'/>
+      <button onClick={()=>{console.log(testUrl);JSSDK.openWebview({url:testUrl,title:'new webview'})}}>打开新的webview</button>
     </div>
   )
 

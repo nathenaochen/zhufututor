@@ -26,6 +26,10 @@ const pages = [
       'pageName': 'setting'
     },
     {
+      'title':'登陆',
+      'pageName': 'login-page'
+    },
+    {
       'title':'Jssdk Test',
       'pageName': 'webviewtest'
     }
