@@ -34,12 +34,14 @@ function WebViewTest(){
 
   return (
     <div className={styles.box}>
-      <p>我是H5页面</p>
-      {/* <button onClick={}>Flutter 调用 js</button> */}
-      <button onClick={()=>{testJssdk()}}>js 调用 Flutter</button>
-      <button onClick={()=>{JSSDK.setTitle({title:'js设置的标题',navBarColor:'#FFB6C1'});}}>设置title</button>
-      <input type="text" onChange={(e)=>{setTestUrl(e.target.value)}} placeholder='http://39.99.174.23/zhifututor/build/login-page.html'/>
-      <button onClick={()=>{console.log(testUrl);JSSDK.openWebview({url:testUrl,title:'new webview'})}}>打开新的webview</button>
+      <p onClick={()=>{testJssdk()}}>js 调用 Flutter</p>
+      <p onClick={()=>{JSSDK.setTitle({title:'js设置的标题',navBarColor:'#FFB6C1'});}}>设置title</p>
+      <p className={styles['third']}>
+        <input type="text" onChange={(e)=>{setTestUrl(e.target.value)}} placeholder='http://39.99.174.23/zhifututor/build/login-page.html'/>
+        <p onClick={()=>{console.log(testUrl);JSSDK.openWebview({url:testUrl,title:'new webview'})}}>打开新的webview</p>
+      </p>
+      <p onClick={()=>{JSSDK.close({type:2});}}>关闭当前webview</p>
+      
     </div>
   )
 

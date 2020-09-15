@@ -63,19 +63,39 @@ JsSdk.prototype.nativeNoreturn = async function(funId,params){
   this.exec(funId,params);
 }
 
-//读取文件信息
+//读取文件信息  params为 {key:['theme]}  key为要读取的内容的key
 JsSdk.prototype.getFileData = function(params){
   return this.nativeIOOpration('1000',params);
 }
 
-//设置title
+//设置title params为 {title:'',navBarColor:''}  title为标题，navBarColor为title栏颜色 暂时还没有实现定制左右按钮的功能
 JsSdk.prototype.setTitle = function(params){
   this.nativeNoreturn('1001',params);
 }
 
-//打开新的webview
+//打开新的webview 
+/**
+ * 
+ * params为 {url:'',title:'',fullScrenn:'', type:''}  
+ * url为新打开页面的地址
+ * title为新打开页面的标题，
+ * fullScrenn为是否以全面屏（即没有原生titlebar）的形式打开webview 默认为false
+ * type为打开webview的类型，1-表示打开fluter页面  默认为webapp页面
+ */
 JsSdk.prototype.openWebview = function(params){
   this.nativeNoreturn('1002',params);
+}
+
+//关闭当前webview
+/**
+ * 
+ * params为 { type:''} 
+ * type表示关闭类型 type-1:表示关闭当前webview  type-2 表示回退到跟路由  
+ *
+ * 
+ */
+JsSdk.prototype.close = function(params){
+  this.nativeNoreturn('1003',params);
 }
 
 
@@ -84,3 +104,7 @@ window.JSSDK = JSSDK;
 window.callBackpoll = JSSDK.callBackpoll;
 window.deviceReady = JSSDK.deviceReady;
 window.getFlutterResFun = JSSDK.getFlutterResFun;
+
+/**
+ * 1000:读取客户端存储信息 
+ */
