@@ -24,24 +24,22 @@ function LoginPage(){
   function handleChange(e:React.ChangeEvent<HTMLInputElement>){
     // console.log(e);
     let value = e.target.value;
-    // setPwd((pwd)=>{
-    //   return pwd + value.slice((value.length - 1));
-    // });
-    // setPwdNo((pwd)=>{
-    //   return pwd + '*';
-    // });
-    setPwd(value);
-  }
-
-  function handleKeydown(e: React.KeyboardEvent<HTMLInputElement>){
-    let value = e.key;
     setPwd((pwd)=>{
-      return pwd + value;
+      if(pwd.length > value.length){
+        return pwd.slice(0,pwd.length - 1);
+      }else{
+        return pwd + value.slice((value.length - 1));
+      }
     });
     setPwdNo((pwd)=>{
-      return pwd + '*';
+      if(pwd.length > value.length){
+        return pwd.slice(0,pwd.length - 1);
+      }else{
+        return pwd + '*';
+      }
     });
   }
+
 
   return (
     <div>
@@ -58,9 +56,8 @@ function LoginPage(){
           <li className={styles['login-item']}>
             <span></span>
             <input 
-              type="password" placeholder='请输入密码' value={pwd} 
+              type="url" placeholder='请输入密码' value={isshowPwd ? pwdNo : pwd} autoFocus={true}
               onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{handleChange(e)}}
-              // onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>)=>{console.log(e,e.key,e.keyCode);handleKeydown(e);}}
             />
             <span onClick={(e:React.MouseEvent)=>{e.stopPropagation();setIsshowPwd((isshow)=>{return !isshow})}} className={isshowPwd ? '' : styles['see']}></span>
           </li>
