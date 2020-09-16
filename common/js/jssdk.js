@@ -41,10 +41,10 @@ JsSdk.prototype.exec = function(funId,params,callbackSuc,callbackFail){
 JsSdk.prototype.ready = function(){
   return new Promise((reslove,reject)=>{
     if(typeof window.JsBridgeInterface == 'object'){
-      reslove({});
+      reslove('app');
     }else{
       document.addEventListener('ready',function(){
-        reslove({});
+        reslove('app');
       },false);
     }
   });

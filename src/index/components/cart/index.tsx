@@ -1,12 +1,13 @@
 import React,{useState,useEffect} from 'react';
 import cns from 'classnames';
 import styles from './cart.less';
+import {pageInit} from 'utils/tool';
 
 export default function Cart(){
 
 
-  function gotoDetail(){console.log('222');
-    (window as any).JSSDK.openWebview({url:'http://39.99.174.23/zhifututor/build/teacher-detial.html',title:''});
+  async function gotoDetail(){
+    pageInit('http://39.99.174.23/zhifututor/build/teacher-detial.html');
   }
 
 

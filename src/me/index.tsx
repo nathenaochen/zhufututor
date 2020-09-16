@@ -10,6 +10,7 @@ import jssdkImg from './images/jssdk_test.png';
 import personInfo from './images/person_info_edit.png';
 import setting from './images/setting.png';
 import tel from './images/tel.png';
+import {pageInit} from 'utils/tool';
 
 let items = [
   {
@@ -37,7 +38,7 @@ let items = [
     desc:'系统设置',
     imgUrl: setting,
     clickFun: ()=>{
-      JSSDK.openWebview({url:'http://39.99.174.23/zhifututor/build/setting.html',title:''});
+      pageInit('http://39.99.174.23/zhifututor/build/setting.html');
     }
   },
   {
@@ -51,7 +52,7 @@ let items = [
     desc:'jssdk测试',
     imgUrl:jssdkImg,
     clickFun: ()=>{
-      JSSDK.openWebview({url:'http://39.99.174.23/zhifututor/build/webviewtest.html',title:''});
+      pageInit('http://39.99.174.23/zhifututor/build/webviewtest.html');
     }
   },
 ]

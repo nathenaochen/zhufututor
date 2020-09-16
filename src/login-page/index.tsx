@@ -22,7 +22,6 @@ function LoginPage(){
   }
 
   function handleChange(e:React.ChangeEvent<HTMLInputElement>){
-    // console.log(e);
     let value = e.target.value;
     setPwd((pwd)=>{
       if(pwd.length > value.length){

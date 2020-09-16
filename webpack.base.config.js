@@ -54,6 +54,7 @@ const baseConfig = {
             apiService:path.resolve(BASE_PATH,'./apiService'),
             constant:path.resolve(BASE_PATH,'./constant'),
             interface:path.resolve(BASE_PATH,'./interface'),
+            utils: path.resolve(BASE_PATH,'./utils'),
         },
         extensions:['.js','.ts','.tsx'],
     },

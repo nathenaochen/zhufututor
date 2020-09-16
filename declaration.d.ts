@@ -8,3 +8,4 @@ declare module '*.jpg'; //图片jpg模块 ，使用import img from './hello.jpg'
 declare module '*.png';
 
 declare var JSSDK:any;
+declare var isApp:boolean;
