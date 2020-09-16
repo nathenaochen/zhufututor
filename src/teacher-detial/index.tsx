@@ -10,13 +10,6 @@ function TeacherDetail(){
 
   return (
     <div className={styles.container}>
-      {/* 顶部区域 */}
-      <div className={styles.header}>
-        <Arrow className={styles.arrow}/>
-        <span>老师详情</span>
-        <img src={require('./images/collect.png')} alt=""/>  
-      </div>
-
       {/* 中间内容区域 */}
       <div className={styles.content}>
         {/* 头像区域 */}
