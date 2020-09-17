@@ -55,7 +55,7 @@ function LoginPage(){
           <li className={styles['login-item']}>
             <span></span>
             <input 
-              type="tel" placeholder='请输入账号' value={userAccount} 
+              type="tel" placeholder='请输入账号' value={userAccount} autoFocus={true}
               onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{setUserAccount(e.target.value)}}
             />
             <span onClick={(e:React.MouseEvent) => {e.stopPropagation();setUserAccount('')}}></span>
@@ -63,7 +63,7 @@ function LoginPage(){
           <li className={styles['login-item']}>
             <span></span>
             <input 
-              type="url" placeholder='请输入密码' value={isshowPwd ? pwdNo : pwd} autoFocus={true}
+              type="url" placeholder='请输入密码' value={isshowPwd ? pwdNo : pwd}
               onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{handleChange(e)}}
             />
             <span onClick={(e:React.MouseEvent)=>{e.stopPropagation();setIsshowPwd((isshow)=>{return !isshow})}} className={isshowPwd ? '' : styles['see']}></span>
@@ -76,11 +76,11 @@ function LoginPage(){
         <div className={styles['button-box']}>
           <p 
             className={cns(styles['login-button'],styles['first'])} 
-            onClick={(e:React.MouseEvent<HTMLParagraphElement, MouseEvent>)=>{e.stopPropagation();gotoLogin()}}
+            onClick={(e:React.MouseEvent)=>{e.stopPropagation();gotoLogin()}}
           >登陆</p>
           <p 
             className={cns(styles['login-button'],styles['second'])} 
-            onClick={(e:React.MouseEvent<HTMLParagraphElement, MouseEvent>)=>{e.stopPropagation();gotoRegister();}}
+            onClick={(e:React.MouseEvent)=>{e.stopPropagation();gotoRegister();}}
           >注册</p>
         </div>
       </div>
