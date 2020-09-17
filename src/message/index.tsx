@@ -86,7 +86,7 @@ let mockData: itemData[] = [
 function MessageList(){
 
   function gotoDetail(){console.log('22233');
-    (window as any).JSSDK.openWebview({url:'/chat_detail',title:'李磊',type:1})
+    JSSDK.openWebview({url:'/chat_detail',title:'李磊',type:1})
   }
 
   return (

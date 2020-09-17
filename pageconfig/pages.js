@@ -30,6 +30,10 @@ const pages = [
       'pageName': 'login-page'
     },
     {
+      'title':'注册',
+      'pageName': 'register'
+    },
+    {
       'title':'Jssdk Test',
       'pageName': 'webviewtest'
     }

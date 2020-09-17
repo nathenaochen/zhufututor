@@ -7,7 +7,7 @@ export default function Cart(){
 
 
   async function gotoDetail(){
-    pageInit('http://39.99.174.23/zhifututor/build/teacher-detial.html');
+    pageInit({url:'teacher-detial.html'});
   }
 
 

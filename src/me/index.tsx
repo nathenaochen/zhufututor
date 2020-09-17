@@ -38,7 +38,7 @@ let items = [
     desc:'系统设置',
     imgUrl: setting,
     clickFun: ()=>{
-      pageInit('http://39.99.174.23/zhifututor/build/setting.html');
+      pageInit({url:'setting.html'});
     }
   },
   {
@@ -52,7 +52,7 @@ let items = [
     desc:'jssdk测试',
     imgUrl:jssdkImg,
     clickFun: ()=>{
-      pageInit('http://39.99.174.23/zhifututor/build/webviewtest.html');
+      pageInit({url:'webviewtest.html'});
     }
   },
 ]

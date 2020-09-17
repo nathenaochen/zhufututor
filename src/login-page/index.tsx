@@ -3,6 +3,7 @@ import ReactDom from 'react-dom';
 import cns from 'classnames';
 import Hoc from 'components/Hoc';
 import styles from './lp.less';
+import {pageInit} from 'utils/tool';
 
 function LoginPage(){
 
@@ -21,17 +22,24 @@ function LoginPage(){
     // JSSDK.openWebview({url:'/',title:'new webview'})
   }
 
+  //去注册
+  function gotoRegister(){
+    pageInit({url:'register.html'});
+  }
+
   function handleChange(e:React.ChangeEvent<HTMLInputElement>){
     let value = e.target.value;
+    //记录实际密码值
     setPwd((pwd)=>{
-      if(pwd.length > value.length){
+      if(pwd.length > value.length){ //判断是否输入的是删除
         return pwd.slice(0,pwd.length - 1);
       }else{
         return pwd + value.slice((value.length - 1));
       }
     });
+    //记录隐藏密码
     setPwdNo((pwd)=>{
-      if(pwd.length > value.length){
+      if(pwd.length > value.length){//判断是否输入的是删除
         return pwd.slice(0,pwd.length - 1);
       }else{
         return pwd + '*';
@@ -50,7 +58,7 @@ function LoginPage(){
               type="tel" placeholder='请输入账号' value={userAccount} 
               onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{setUserAccount(e.target.value)}}
             />
-            <span></span>
+            <span onClick={(e:React.MouseEvent) => {e.stopPropagation();setUserAccount('')}}></span>
           </li>
           <li className={styles['login-item']}>
             <span></span>
@@ -72,7 +80,7 @@ function LoginPage(){
           >登陆</p>
           <p 
             className={cns(styles['login-button'],styles['second'])} 
-            onClick={(e:React.MouseEvent<HTMLParagraphElement, MouseEvent>)=>{}}
+            onClick={(e:React.MouseEvent<HTMLParagraphElement, MouseEvent>)=>{e.stopPropagation();gotoRegister();}}
           >注册</p>
         </div>
       </div>

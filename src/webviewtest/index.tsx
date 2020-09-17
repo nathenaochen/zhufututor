@@ -40,7 +40,7 @@ function WebViewTest(){
         <input type="text" onChange={(e)=>{setTestUrl(e.target.value)}} placeholder='http://39.99.174.23/zhifututor/build/login-page.html'/>
         <p onClick={()=>{console.log(testUrl);JSSDK.openWebview({url:testUrl,title:'new webview'})}}>打开新的webview</p>
       </p>
-      <p onClick={()=>{JSSDK.close({type:2});}}>关闭当前webview</p>
+      <p onClick={()=>{JSSDK.close({type:1});}}>关闭当前webview</p>
       
     </div>
   )
