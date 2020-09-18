@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import ReactDom from 'react-dom';
 import cns from 'classnames';
 import Hoc from 'components/Hoc';
+import Dailog from 'components/Dailog';
 import styles from './reg.less';
 import {pageInit} from 'utils/tool';
 import {register} from 'apiService/service';
@@ -19,6 +20,8 @@ function Register(){
    const [pwdSureNo, setPwdSureNo] = useState('');
    //单选框
    const [type, setType] = useState('STUDENT');
+   //控制dailog
+   const [showDailog,setShowDailog] = useState(false);
 
   function handleChange(e:React.ChangeEvent<HTMLInputElement>, type:string){
     let value = e.target.value;
@@ -60,16 +63,16 @@ function Register(){
   }
 
   //去注册
-  async function goRegister(){
-    console.log(userName,pwd,pwdSure,type);
-    if(!userName || !pwd || !pwdSure || !type){
-      console.log('用户名密码等不能为空');
-    }
-    const {code, result} = await register({username:userName,password:pwd,passwordSure:pwdSure,type:type});
-    console.log('注册返回结果',result);
-    if(code == '0'){
-      pageInit({url:'login-page.html'});
-    }
+  async function goRegister(){ setShowDailog(true);
+    // console.log(userName,pwd,pwdSure,type);
+    // if(!userName || !pwd || !pwdSure || !type){
+    //   console.log('用户名密码等不能为空');
+    // }
+    // const {code, result} = await register({username:userName,password:pwd,passwordSure:pwdSure,type:type});
+    // console.log('注册返回结果',result);
+    // if(code == '0'){
+    //   pageInit({url:'login-page.html'});
+    // }
   }
 
   return (
@@ -112,6 +115,7 @@ function Register(){
           已有帐号? <span onClick={(e:React.MouseEvent)=>{e.stopPropagation();pageInit({url:'login-page.html'});}}>登陆</span> 
         </div> */}
       </div>
+      <Dailog visable={showDailog} title='注册成功' message='lalal的那份几年的时间妇女解放你单独刷卡积分当年反抗' btns={[{text:'确认',action: ()=>{setShowDailog(false)}},{text:'取消',action: ()=>{setShowDailog(false)}}]}/>
     </div>
   )
 }
