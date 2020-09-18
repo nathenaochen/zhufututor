@@ -4,6 +4,7 @@ import cns from 'classnames';
 import Hoc from 'components/Hoc';
 import styles from './reg.less';
 import {pageInit} from 'utils/tool';
+import {register} from 'apiService/service';
 
 function Register(){
    //用户用户名
@@ -61,6 +62,14 @@ function Register(){
   //去注册
   async function goRegister(){
     console.log(userName,pwd,pwdSure,type);
+    if(!userName || !pwd || !pwdSure || !type){
+      console.log('用户名密码等不能为空');
+    }
+    const {code, result} = await register({username:userName,password:pwd,passwordSure:pwdSure,type:type});
+    console.log('注册返回结果',result);
+    if(code == '0'){
+      pageInit({url:'login-page.html'});
+    }
   }
 
   return (
