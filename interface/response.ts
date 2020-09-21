@@ -1,9 +1,12 @@
 export interface resData{
   code: string;
-  result: Object;
+  result: Result;
 }
 export interface resDataFail{
   code: string;
-  result: Object;
+  result: Result;
   errorMeg: object | string;
+}
+interface Result{
+  [x:string]: any 
 }

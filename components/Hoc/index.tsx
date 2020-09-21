@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react';
+import React,{useState, useEffect, FunctionComponent} from 'react';
 import '../../pageconfig/init.css';
 import Vconsole from 'vconsole';
 import {checkIsApp} from 'utils/tool';
@@ -8,7 +8,7 @@ interface globalData {
   b:string
 }
 
-function Hoc(WrapComponent: React.ComponentType<globalData>){
+function Hoc(WrapComponent:FunctionComponent<globalData>){
   return () => {
 
 

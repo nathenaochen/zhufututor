@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef, ReactNode} from 'react';
 import ReactDom from 'react-dom';
 import cns from 'classnames';
 import Hoc from 'components/Hoc';
@@ -6,6 +6,18 @@ import Dailog from 'components/Dailog';
 import styles from './reg.less';
 import {pageInit} from 'utils/tool';
 import {register} from 'apiService/service';
+
+interface BtnAttr {
+  text: string;   //按钮文字
+  action: Function; //点击按钮执行的方法
+}
+interface DailogProps {
+  message?: string;   //弹框提示内容
+  btns?: BtnAttr[];    //按钮列表
+  className?: string;  //外传控制class
+  title?: string;      //弹框标题
+  children?: ReactNode;
+}
 
 function Register(){
    //用户用户名
@@ -20,8 +32,10 @@ function Register(){
    const [pwdSureNo, setPwdSureNo] = useState('');
    //单选框
    const [type, setType] = useState('STUDENT');
-   //控制dailog
+   //控制dailog的显示隐藏
    const [showDailog,setShowDailog] = useState(false);
+   //控制dailog的相关属性
+   const dailogMsg = useRef<DailogProps>({});
 
   function handleChange(e:React.ChangeEvent<HTMLInputElement>, type:string){
     let value = e.target.value;
@@ -63,16 +77,44 @@ function Register(){
   }
 
   //去注册
-  async function goRegister(){ setShowDailog(true);
-    // console.log(userName,pwd,pwdSure,type);
-    // if(!userName || !pwd || !pwdSure || !type){
-    //   console.log('用户名密码等不能为空');
-    // }
-    // const {code, result} = await register({username:userName,password:pwd,passwordSure:pwdSure,type:type});
-    // console.log('注册返回结果',result);
-    // if(code == '0'){
-    //   pageInit({url:'login-page.html'});
-    // }
+  async function goRegister(){
+    if(!userName || !pwd || !pwdSure || !type){
+      dailogMsg.current.message = '输入的字符不能为空，请检查';
+      dailogMsg.current.btns = [{text:'确定',action:()=>{setShowDailog(false)}}];
+      setShowDailog(true);
+      return ;
+    }
+    if(pwd != pwdSure){
+      dailogMsg.current.message = '两次输入密码不一样';
+      dailogMsg.current.btns = [{text:'确定',action:()=>{setShowDailog(false)}}];
+      setShowDailog(true);
+      return ;
+    }
+    if(pwd.length < 6 || pwdSure.length < 6){
+      dailogMsg.current.message = '密码不能少于6位数';
+      dailogMsg.current.btns = [{text:'确定',action:()=>{setShowDailog(false)}}];
+      setShowDailog(true);
+      return ;
+    }
+    try{
+      const {code, result} = await register({username:userName,password:pwd,passwordSure:pwdSure,type:type});
+      console.log('注册返回结果',result,result?.user?.account);
+      if(code == '0'){
+        dailogMsg.current.title = `恭喜您注册成功`;
+        dailogMsg.current.message = `您的账号是 ${result?.user?.account}`;
+        dailogMsg.current.btns = [{text:'马上登陆',action:()=>{pageInit({url:'login-page.html'})}},{text:'绑定电话', action: ()=>{pageInit({url:'setting.html'})}}];
+        setShowDailog(true);
+      }else{
+        dailogMsg.current.message = `${result?.errorMeg}`;
+        dailogMsg.current.btns = [{text:'确定',action:()=>{setShowDailog(false)}}];
+        setShowDailog(true);
+      }
+    }catch(err){
+      console.log(err);
+      dailogMsg.current.message = `${err?.errorMeg}`;
+      dailogMsg.current.btns = [{text:'确定',action:()=>{setShowDailog(false)}}];
+      setShowDailog(true);
+    }
   }
 
   return (
@@ -115,7 +157,11 @@ function Register(){
           已有帐号? <span onClick={(e:React.MouseEvent)=>{e.stopPropagation();pageInit({url:'login-page.html'});}}>登陆</span> 
         </div> */}
       </div>
-      <Dailog visable={showDailog} title='注册成功' message='lalal的那份几年的时间妇女解放你单独刷卡积分当年反抗' btns={[{text:'确认',action: ()=>{setShowDailog(false)}},{text:'取消',action: ()=>{setShowDailog(false)}}]}/>
+      <Dailog 
+        visable={showDailog} 
+        title={dailogMsg.current.title} 
+        message={dailogMsg.current.message} 
+        btns={dailogMsg.current.btns}/>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 /**
  * 定义弹框公共组件
  */
-import React, {useState,ComponentType,ReactNode} from 'react';
+import React, {useState,FunctionComponent,ReactNode} from 'react';
 import styles from './dailog.less';
 import cns from 'classnames';
 
@@ -15,10 +15,10 @@ interface DailogProps {
   btns?: BtnAttr[];    //按钮列表
   className?: string;  //外传控制class
   title?: string;      //弹框标题
-  children?: ReactNode;
+  children?: ReactNode; //用于支持自定义弹框
 }
 
-const Dailog: ComponentType<DailogProps> = (props:DailogProps) => {
+const Dailog: FunctionComponent<DailogProps> = (props:DailogProps) => {
   const {className,visable,message,btns,title, children} = props; console.log(children);
   return (
     <div className={cns(styles['mask'], className ,visable ? styles['show'] : styles['hidden'])}>
@@ -44,5 +44,6 @@ const Dailog: ComponentType<DailogProps> = (props:DailogProps) => {
     </div>
   )
 }
+
 
 export default Dailog;
