@@ -80,10 +80,11 @@ JsSdk.prototype.setTitle = function(params){
  * url为新打开页面的地址
  * title为新打开页面的标题，
  * fullScrenn为是否以全面屏（即没有原生titlebar）的形式打开webview 默认为false
- * type为打开webview的类型，1-表示打开fluter页面  默认为webapp页面
+ * type为打开webview的类型，1-表示打开fluter页面  2-表示打开webapp页面 默认为webapp页面
+ * needclose---表示在打开新的webview时，是否需要移除当前的webview。  1--表示不移除   2---表示移除  默认为1
  */
 JsSdk.prototype.openWebview = function(params){
-  this.nativeNoreturn('1002',params);
+  this.nativeNoreturn('1002',{type:2,needclose:1,...params});
 }
 
 //关闭当前webview
@@ -95,7 +96,18 @@ JsSdk.prototype.openWebview = function(params){
  * 
  */
 JsSdk.prototype.close = function(params){
-  this.nativeNoreturn('1003',params);
+  this.nativeNoreturn('1003',{type:1,...params});
+}
+
+//向客户端写入持久性数据
+/**
+ * 
+ * params为 { key:value} 
+ *
+ * 
+ */
+JsSdk.prototype.writeData = function(params){
+  this.nativeNoreturn('1004',params);
 }
 
 

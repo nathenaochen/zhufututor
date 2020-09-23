@@ -7,18 +7,14 @@ function joint(obj_1:object,obj_2:object){
   return Object.assign(obj_1,obj_2);
 }
 
-export function getUser(data:any):Promise<resData | resDataFail>{
-  return http.get(getUserUrl,{params:data});
-}
-
+//注册接口
 export function register(data:any):Promise<resData | resDataFail>{
   return http.post(baseUrl,joint({snType:'sas',serviceName:'serviceName.user.register'},data));
 }
-
-export function getToken(data:any):Promise<resData | resDataFail>{
-  return http.post(gettokenUrl,data);
+//登录接口
+export function login(data:any):Promise<resData | resDataFail>{
+  return http.post(baseUrl,joint({snType:'sas',serviceName:'serviceName.user.login'},data));
 }
 
-export function validatetoken(data:any):Promise<resData | resDataFail>{
-  return http.post(validatetokenUrl,data);
-}
+
+

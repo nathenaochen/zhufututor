@@ -102,8 +102,9 @@ function Register(){
       if(code == '0'){
         dailogMsg.current.title = `恭喜您注册成功`;
         dailogMsg.current.message = `您的账号是 ${result?.user?.account}`;
-        dailogMsg.current.btns = [{text:'马上登陆',action:()=>{pageInit({url:'login-page.html'})}},{text:'绑定电话', action: ()=>{pageInit({url:'setting.html'})}}];
+        dailogMsg.current.btns = [{text:'马上登陆',action:()=>{pageInit({url:'login-page.html',needclose:2,hasInput:true})}},{text:'绑定电话', action: ()=>{pageInit({url:'setting.html',needclose:2})}}];
         setShowDailog(true);
+        JSSDK.writeData({account:result?.user?.account});
       }else{
         dailogMsg.current.message = `${result?.errorMeg}`;
         dailogMsg.current.btns = [{text:'确定',action:()=>{setShowDailog(false)}}];

@@ -16,7 +16,7 @@ export function pageInit(config:openViewParams) {
     if(config.url.indexOf('http') > -1){  //判断是否传的全路径
       JSSDK.openWebview(config);
     }else{
-      if(config.type == '1'){  //判断跳转类型  1为跳转到fluter路由
+      if(config.type == 1){  //判断跳转类型  1为跳转到fluter路由
         JSSDK.openWebview(config);
       }else{
         config.url = location.href.split('build')[0] + 'build/' + config.url;
