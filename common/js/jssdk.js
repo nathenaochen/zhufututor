@@ -101,13 +101,25 @@ JsSdk.prototype.close = function(params){
 
 //向客户端写入持久性数据
 /**
- * 
  * params为 { key:value} 
- *
- * 
  */
 JsSdk.prototype.writeData = function(params){
   this.nativeNoreturn('1004',params);
+}
+
+//onappear事件，当页面露出时执行回调
+/**
+ * params为 { fn:function} 
+ * 参数为一个函数
+ */
+JsSdk.prototype.onappear = function(params){
+  params = params || {};
+  if(typeof params.cb != 'function'){
+    return 'cb必须是一个函数'
+  }
+  window.tutorsdk = window.tutorsdk || {};
+  window.tutorsdk.onappear = params.cb;
+  this.nativeNoreturn('1005',{cb:'window.tutorsdk.onappear'});
 }
 
 

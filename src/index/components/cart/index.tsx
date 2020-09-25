@@ -11,6 +11,9 @@ export default function Cart(){
   }
 
 
+  useEffect(()=>{
+  },[]);
+
   return (
     <div className={styles.cart} onClick={(e:React.MouseEvent)=>{e.stopPropagation();gotoDetail();}}> 
       <div className={styles['left']}>

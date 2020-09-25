@@ -9,7 +9,30 @@ function WebViewTest(){
 
   useEffect(()=>{
     new Vconsole();
-    console.log('init');
+    // console.log('init');
+    // let hidden:string = 'hidden', visibilityState:string = 'visibilitychange';
+    // if(typeof document.hidden !== 'undefined'){
+    //   hidden = 'hidden';
+    //   visibilityState = 'visibilitychange'
+    // }else if(typeof (document as any).msHidden !== 'undefined'){
+    //   hidden = 'msHidden';
+    //   visibilityState = 'msvisibilitychange';
+    // }else if(typeof (document as any).webkitHidden !== 'undefined'){
+    //   hidden = 'webkitHidden';
+    //   visibilityState = 'webkitvisibilitychange'
+    // }
+    // document.addEventListener(visibilityState,function(){
+    //   if((document as any)[hidden]){
+    //     //当切换到后台时需要做的事
+    //     console.log(document.hidden,'document.hidden-11');
+    //   }else{
+    //     //当从后台切回来时需要做的事
+    //     console.log(document.hidden,'document.hidden-22');
+    //   }
+    // },false)
+    JSSDK.onappear({cb:()=>{
+      console.log('webtesttwst---onappear');
+    }})
   },[]);
 
   async function flutterCallJs(){

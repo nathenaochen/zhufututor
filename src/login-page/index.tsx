@@ -53,7 +53,9 @@ function LoginPage(){
   //页面初始化
   useEffect(()=>{
     init();
-
+    JSSDK.onappear({cb:()=>{
+      console.log('login-page---onappear');
+    }})
   },[]);
 
   //生成随机验证码
@@ -98,9 +100,9 @@ function LoginPage(){
     }
     try{
       const {code, result, errorMeg} = await login({account:userAccount,password:pwd});
-      console.log('登陆返回结果',result,result?.user?.account);
+      console.log('登陆返回结果',result,result?.user?.type);
       if(code == '0'){
-        JSSDK.writeData({account:result?.user?.account,token:result?.user?.key,role:result?.uesr?.role});
+        JSSDK.writeData({account:result?.user?.account,token:result?.user?.key,role:result?.user?.type});
         JSSDK.close({});
       }else{
         dailogMsg.current.message = `${errorMeg}`;
@@ -149,7 +151,7 @@ function LoginPage(){
           <li className={styles['login-item']}>
             <span></span>
             <input 
-              type="tel" placeholder='请输入账号' value={userAccount} autoFocus={true}
+              type="tel" placeholder='请输入账号' value={userAccount}
               onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{setUserAccount(e.target.value)}}
             />
             <span onClick={(e:React.MouseEvent) => {e.stopPropagation();setUserAccount('')}}></span>

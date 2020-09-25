@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDom from 'react-dom';
 import cns from 'classnames';
 import Hoc from 'components/Hoc';
@@ -58,6 +58,14 @@ let items = [
 ]
 
 function Me(){
+
+
+
+  useEffect(()=>{
+    JSSDK.onappear({cb:()=>{
+      console.log('me---onappear');
+    }})
+  },[]);
 
 
   return (

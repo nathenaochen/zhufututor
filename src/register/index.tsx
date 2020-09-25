@@ -104,7 +104,7 @@ function Register(){
         dailogMsg.current.message = `您的账号是 ${result?.user?.account}`;
         dailogMsg.current.btns = [{text:'马上登陆',action:()=>{pageInit({url:'login-page.html',needclose:2,hasInput:true})}},{text:'绑定电话', action: ()=>{pageInit({url:'setting.html',needclose:2})}}];
         setShowDailog(true);
-        JSSDK.writeData({account:result?.user?.account});
+        JSSDK.writeData({account:result?.user?.account,token:'',role:''});
       }else{
         dailogMsg.current.message = `${result?.errorMeg}`;
         dailogMsg.current.btns = [{text:'确定',action:()=>{setShowDailog(false)}}];
@@ -125,7 +125,7 @@ function Register(){
           <li className={styles['login-item']}>
             <span></span>
             <input  
-              type="text" placeholder='请输入用户名' autoFocus={true} value={userName} 
+              type="text" placeholder='请输入用户名' value={userName} 
               onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{setUserName(e.target.value)}}/>
             <span onClick={(e:React.MouseEvent) => {e.stopPropagation();setUserName('')}}></span>
           </li>

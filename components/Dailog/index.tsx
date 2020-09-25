@@ -19,7 +19,7 @@ interface DailogProps {
 }
 
 const Dailog: FunctionComponent<DailogProps> = (props:DailogProps) => {
-  const {className,visable,message,btns,title, children} = props; console.log(children);
+  const {className,visable,message,btns,title, children} = props; 
   return (
     <div className={cns(styles['mask'], className ,visable ? styles['show'] : styles['hidden'])}>
       <div className={styles['dailog-box']}>

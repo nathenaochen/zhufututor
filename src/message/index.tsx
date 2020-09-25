@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import ReactDom from 'react-dom';
 import cns from 'classnames';
 import Hoc from 'components/Hoc';
@@ -84,6 +84,12 @@ let mockData: itemData[] = [
 ]
 
 function MessageList(){
+
+  useEffect(()=>{
+    JSSDK.onappear({cb:()=>{
+      console.log('message---onappear');
+    }})
+  },[]);
 
   function gotoDetail(){console.log('22233');
     JSSDK.openWebview({url:'/chat_detail',title:'李磊',type:1})
