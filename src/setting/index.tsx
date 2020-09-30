@@ -8,8 +8,8 @@ function Setting(){
 
 
   return (
-    <div>
-      setting
+    <div className={styles['container']}>
+      <div  onClick={(e:React.MouseEvent) => {e.stopPropagation(); JSSDK.writeData({token:'',role:''});}}>退出登录</div>
     </div>
   )
 }

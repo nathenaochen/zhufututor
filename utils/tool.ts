@@ -1,5 +1,6 @@
 
 import {openViewParams} from 'interface/jssdkParams';
+import URI from 'urijs';
 
 
 //判断检查是否在app内
@@ -36,3 +37,24 @@ export function pageInit(config:openViewParams) {
     }
   }
 }
+
+/**
+ * 获取真实像素值 用于在通过js设置像素时来调用，做到适配
+ * rawPx: 需要转化的像素值  number类型
+ * relativeSize： 转化的相对单位，默认为75，即iphone6
+ */
+export function px(rawPx:number,relativeSize = 75):number{
+  //获取当前
+  let htmlFontSize = parseFloat(document.documentElement.style.fontSize);
+  return ((+htmlFontSize)*rawPx)/relativeSize;
+
+}
+
+/**
+ * 获取ur上的query
+ */
+
+ export function getUrlQuery(){
+   const url = new URI(window.location.href);
+   return url.query(true);
+ }

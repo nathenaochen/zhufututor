@@ -2,12 +2,18 @@ import React,{useState,useEffect} from 'react';
 import cns from 'classnames';
 import styles from './cart.less';
 import {pageInit} from 'utils/tool';
+import {getTeacherLisRes} from 'interface/response';
 
-export default function Cart(){
+interface CardProps {
+  teacher: getTeacherLisRes;
+}
 
+export default function Cart(props:CardProps){
 
-  async function gotoDetail(){
-    pageInit({url:'teacher-detial.html'});
+  const {teacher} = props;
+
+  async function gotoDetail(key:string){
+    pageInit({url:`teacher-detial.html?key=${key}`});
   }
 
 
@@ -15,31 +21,35 @@ export default function Cart(){
   },[]);
 
   return (
-    <div className={styles.cart} onClick={(e:React.MouseEvent)=>{e.stopPropagation();gotoDetail();}}> 
+    <div className={styles.cart} onClick={(e:React.MouseEvent)=>{e.stopPropagation();gotoDetail(teacher.key);}}> 
       <div className={styles['left']}>
         <div className={styles.image}>
-          <img src={require('./images/header.jpg')} alt=""/>  
+          <img src={teacher.header_img} alt=""/>  
         </div>
-        <p className={styles.level}>三星老师</p>
+        <p className={styles.level}>{teacher.teacher_level}</p>
       </div>
       <div className={styles['right']}>
         <div className={styles['title']}>
-          <span className={styles['name']}>Tony老师</span>
-          <span className={cns(styles['sex'],styles['boy'])}></span>
-          <span className={styles['time']}>寒暑假</span>
+          <span className={styles['name']}>{teacher.name}</span>
+          <span className={cns(styles['sex'],teacher.sex == '0' ? styles['girl'] : styles['boy'])}></span>
+          {
+            teacher.free_time.split(',').map((item)=>{
+              return  <span className={styles['time']}>{item}</span>
+            })
+          }
         </div>
         <div className={styles['tercher-info']}>
           <p>
-            <span className={styles['school']}>北京大学</span>
-            <span className={styles['quali']}>本科</span>
-            <span className={styles['has-teach']}>授课<span>0</span>课时</span>
+            <span className={styles['school']}>{teacher.school_tag}</span>
+            <span className={styles['quali']}>{teacher.degree}</span>
+            <span className={styles['has-teach']}>授课<span>{teacher.teaching_time}</span>课时</span>
           </p>
-          <span className={styles['money']}>￥{100}元</span>
+          <span className={styles['money']}>￥{teacher.charge}元/小时</span>
         </div>
         <div className={styles['terch-rang']}>
           <p className={styles['grade']}>
             {
-              ['一年级','二年级','三年级'].map((item)=>{
+              teacher.teach_class.split(',').map((item)=>{
                 return (
                 <span>{item}</span>
                 )
@@ -48,7 +58,7 @@ export default function Cart(){
           </p>
           <p className={styles['subject']}>
             {
-              ['数学','语文','英语'].map((item)=>{
+              teacher.teach_project.split(',').map((item)=>{
                 return (
                 <span>{item}</span>
                 )

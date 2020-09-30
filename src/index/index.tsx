@@ -5,22 +5,33 @@ import NoLogin from 'components/NoLogin';
 import Loading from 'components/Loading';
 import styles from './index.less';
 import Cart from './components/cart/index';
-import { pageInit } from 'utils/tool';
+import { pageInit, px, getUrlQuery } from 'utils/tool';
+import {getTeacherList} from 'apiService/service';
+import {getTeacherLisRes,Result} from 'interface/response';
 
 function Index(){
 
-  const [isLogin, setIsLogin] = useState<boolean|string>('init');
-
+  //教师列表数据
+  const [teacherList, setTeacherList] = useState<getTeacherLisRes[]|Result>();
+  
+  
 
   async function init() {
     //检查是否有登录态
     const {role} = await JSSDK.getFileData({key:['role']});
     // const {account} = await JSSDK.getFileData({key:['account']});
-    console.log(role,'role');
+    // console.log(role,'role');
+    // console.log(px(600),'600',getUrlQuery());
     if(role != null){
-      setIsLogin(true);
+      const {code, result} = await getTeacherList({});
+      console.log(result,'查询教师列表页结果');
+      if(+code == 0){
+        setTeacherList(result);
+      }else{
+        setTeacherList([]);
+      }
     }else{
-      setIsLogin(false);
+      setTeacherList([]);
     }
 
   }
@@ -34,13 +45,13 @@ function Index(){
     }})
   },[]);
   
-  if(isLogin == 'init'){
+  if(!teacherList){
     return <Loading />
   }
   
   return (
     <>
-      { isLogin ? 
+      { teacherList.length > 0 ? 
         <div className={styles.container}>
           <div className={styles.nav}>
             <div className={styles.left}>
@@ -56,9 +67,9 @@ function Index(){
           <div className={styles['cart-container']}>
             <div className={styles.content}>
               {
-                [1,2,3,4,5,6,7,8].map(()=>{
+                teacherList.map((item:getTeacherLisRes)=>{
                   return (
-                    <Cart />
+                    <Cart teacher={item}/>
                   )
                 })
               }
