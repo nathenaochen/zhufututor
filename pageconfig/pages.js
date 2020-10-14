@@ -34,6 +34,10 @@ const pages = [
       'pageName': 'register'
     },
     {
+      'title':'聊天',
+      'pageName': 'test-chat'
+    },
+    {
       'title':'Jssdk Test',
       'pageName': 'webviewtest'
     }

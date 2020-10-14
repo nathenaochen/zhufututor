@@ -58,3 +58,34 @@ export function px(rawPx:number,relativeSize = 75):number{
    const url = new URI(window.location.href);
    return url.query(true);
  }
+
+ /**
+  * 封装localStorage
+  * set方法想localStorage存值 参数：对象
+  * get方法从localStorage取值 参数： 数组
+  */
+ export const storage = {
+   set: function(setObj:any){
+    if(setObj.constructor !== Object){
+      console.log('--参数有错误--storag.set');
+      return null;
+    };
+    let keys = Object.keys(setObj);
+    keys.forEach((v:string,i:number)=>{
+      let strVal = setObj[v] ? JSON.stringify(setObj[v]) : '';
+      localStorage.setItem(v,strVal);
+    });
+   },
+   get: function(keys:Array<string>){
+    if(keys.constructor !== Array){
+      console.log('--参数有错误--storag.get');
+      return null;
+    };
+    let valObj: any = {};
+    keys.forEach((k,i)=>{
+      let val = localStorage.getItem(k);
+      valObj[k] = val ? JSON.parse(val) : val;
+    });
+    return valObj;
+   }
+ }
