@@ -4,7 +4,7 @@ import cns from 'classnames';
 import Hoc from 'components/Hoc';
 import Dailog from 'components/Dailog';
 import styles from './lp.less';
-import {pageInit} from 'utils/tool';
+import {pageInit, storage} from 'utils/tool';
 import {login} from 'apiService/service';
 
 interface BtnAttr {
@@ -45,8 +45,14 @@ function LoginPage(){
     setAuthCode(()=>{
       return createCode();
     });
-    const {account} = await JSSDK.getFileData({key:['account']});
-    account != null && setUserAccount(account);
+    if(window.isApp){
+      const {account} = await JSSDK.getFileData({key:['account']});
+      account != null && setUserAccount(account);
+    }else{
+      const {account} = storage.get(['account']);
+      account != null && setUserAccount(account);
+    }
+    
   }
 
 
@@ -102,8 +108,15 @@ function LoginPage(){
       const {code, result, errorMeg} = await login({account:userAccount,password:pwd});
       console.log('登陆返回结果',result,result?.user?.type);
       if(code == '0'){
-        JSSDK.writeData({account:result?.user?.account,token:result?.user?.key,role:result?.user?.type});
-        JSSDK.close({});
+        //app内
+        if(window.isApp){
+          JSSDK.writeData({account:result?.user?.account,token:result?.user?.key,role:result?.user?.type});
+          JSSDK.close({});
+        }else{
+          //非app内
+          storage.set({account:result?.user?.account,token:result?.user?.key,role:result?.user?.type});
+          window.history.back();
+        }
       }else{
         dailogMsg.current.message = `${errorMeg}`;
         dailogMsg.current.btns = [{text:'确定',action:()=>{setShowDailog(false)}}];

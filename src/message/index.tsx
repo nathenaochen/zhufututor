@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import ReactDom from 'react-dom';
 import cns from 'classnames';
+import { pageInit } from 'utils/tool';
 import Hoc from 'components/Hoc';
 import styles from './msg.less';
 
@@ -92,7 +93,12 @@ function MessageList(){
   },[]);
 
   function gotoDetail(){console.log('22233');
-    JSSDK.openWebview({url:'/chat_detail',title:'李磊',type:1})
+    if(window.isApp){
+      JSSDK.openWebview({url:'/chat_detail',title:'李磊',type:1})
+    }else{
+      pageInit({url:'/test-chat.html'});
+    }
+    
   }
 
   return (

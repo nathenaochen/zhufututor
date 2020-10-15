@@ -4,7 +4,7 @@ import cns from 'classnames';
 import Hoc from 'components/Hoc';
 import Dailog from 'components/Dailog';
 import styles from './reg.less';
-import {pageInit} from 'utils/tool';
+import {pageInit,storage} from 'utils/tool';
 import {register} from 'apiService/service';
 
 interface BtnAttr {
@@ -105,6 +105,7 @@ function Register(){
         dailogMsg.current.btns = [{text:'马上登陆',action:()=>{pageInit({url:'login-page.html',needclose:2,hasInput:true})}},{text:'绑定电话', action: ()=>{pageInit({url:'setting.html',needclose:2})}}];
         setShowDailog(true);
         JSSDK.writeData({account:result?.user?.account,token:'',role:''});
+        storage.set({account:result?.user?.account,token:'',role:''}); //非app内
       }else{
         dailogMsg.current.message = `${result?.errorMeg}`;
         dailogMsg.current.btns = [{text:'确定',action:()=>{setShowDailog(false)}}];
@@ -152,7 +153,7 @@ function Register(){
         </ul>
         <div className={styles['button-box']}>
           <p className={cns(styles['login-button'],styles['first'])} onClick={(e:React.MouseEvent) => {e.stopPropagation();goRegister();}}>注册</p>
-          <p className={cns(styles['login-button'],styles['second'])} onClick={(e:React.MouseEvent) => {e.stopPropagation();pageInit({url:'login-page.html'});}}>已有帐号?登陆</p>
+          <p className={cns(styles['login-button'],styles['second'])} onClick={(e:React.MouseEvent) => {e.stopPropagation();pageInit({url:'login-page.html',needclose:2,hasInput:true});}}>已有帐号?登陆</p>
         </div>
         {/* <div className={styles['footer']}>
           已有帐号? <span onClick={(e:React.MouseEvent)=>{e.stopPropagation();pageInit({url:'login-page.html'});}}>登陆</span> 

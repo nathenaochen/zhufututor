@@ -5,7 +5,7 @@ import NoLogin from 'components/NoLogin';
 import Loading from 'components/Loading';
 import styles from './index.less';
 import Cart from './components/cart/index';
-import { pageInit, px, getUrlQuery } from 'utils/tool';
+import { pageInit, px, getUrlQuery, storage } from 'utils/tool';
 import {getTeacherList} from 'apiService/service';
 import {getTeacherLisRes,Result} from 'interface/response';
 
@@ -17,12 +17,17 @@ function Index(){
   
 
   async function init() {
+    let loginStatus;
     //检查是否有登录态
-    const {role} = await JSSDK.getFileData({key:['role']});
+    if(window.isApp){
+      loginStatus = await JSSDK.getFileData({key:['role']});
+    }else{
+      loginStatus = storage.get(['role']);
+    }
     // const {account} = await JSSDK.getFileData({key:['account']});
     // console.log(role,'role');
     // console.log(px(600),'600',getUrlQuery());
-    if(role != null){
+    if(loginStatus.role != null){
       const {code, result} = await getTeacherList({});
       console.log(result,'查询教师列表页结果');
       if(+code == 0){

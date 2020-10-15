@@ -26,13 +26,26 @@ export function pageInit(config:openViewParams) {
     }
   }else{
     if(config.url.indexOf('http') > -1){
-      window.location.href = config.url;
+      if(config.needclose == 2){
+        window.history.replaceState(null, '', config.url);
+      }else{
+        window.location.href = config.url;
+      }
     }else{
       //因为开发环境（即浏览器端没有build） 所以需要单独判断
       if(location.href.indexOf('localhost') > -1){
-        window.location.href = location.origin + '/' + config.url;
+        if(config.needclose == 2){
+          window.location.replace(location.origin + '/' + config.url);
+        }else{
+          window.location.href = location.origin + '/' + config.url;
+        }
       }else{
-        window.location.href = location.href.split('build')[0] + 'build/' + config.url;
+        if(config.needclose == 2){
+          window.location.replace(location.href.split('build')[0] + 'build/' + config.url);
+        }else{
+          window.location.href = location.href.split('build')[0] + 'build/' + config.url;
+        }
+        
       }
     }
   }
