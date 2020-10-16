@@ -110,11 +110,11 @@ function LoginPage(){
       if(code == '0'){
         //app内
         if(window.isApp){
-          JSSDK.writeData({account:result?.user?.account,token:result?.user?.key,role:result?.user?.type});
+          JSSDK.writeData({account:result?.user?.account,token:result?.user?.key,role:result?.user?.type,username:result?.user?.username});
           JSSDK.close({});
         }else{
           //非app内
-          storage.set({account:result?.user?.account,token:result?.user?.key,role:result?.user?.type});
+          storage.set({account:result?.user?.account,token:result?.user?.key,role:result?.user?.type,username: result?.user?.username});
           window.history.back();
         }
       }else{

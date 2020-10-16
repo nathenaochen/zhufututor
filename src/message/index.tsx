@@ -1,9 +1,13 @@
-import React, {useEffect} from 'react';
+import React, {useEffect,useRef, useState} from 'react';
 import ReactDom from 'react-dom';
 import cns from 'classnames';
 import { pageInit } from 'utils/tool';
 import Hoc from 'components/Hoc';
+import Loading from 'components/Loading';
+import io from 'socket.io-client';
+import {storage,getUrlQuery} from 'utils/tool';
 import styles from './msg.less';
+import {getRecentList} from 'apiService/service';
 
 interface itemData {
   name: string;
@@ -86,33 +90,84 @@ let mockData: itemData[] = [
 
 function MessageList(){
 
+  const sender = storage.get(['token']).token;
+
+  //存储socket对象
+  const socK = useRef<any>();
+
+  //最近联系好友列表
+  const [recentlyFriend, setRecentlyFriend] = useState<any>();
+
+  //数据初始化
+  async function init(){
+    try{
+      const {result} = await getRecentList({senderKey:sender});
+      console.log('获取最近好友列表结果',result);
+      setRecentlyFriend(result);
+    }catch(err){
+      console.log('获取最近好友列表结果报错',err)
+    }
+  }
+
+  //组件初始化
   useEffect(()=>{
     JSSDK.onappear({cb:()=>{
       console.log('message---onappear');
     }})
+
+    //创建websocket对象
+    let socket = io.connect('http://localhost:3001/chat',{query:{sender:sender,typeCon:'list'}});
+    socK.current = socket;
+    socket.on('connect', function () {
+      console.log('链接成功');
+    });
+    // 监听newmsg事件,新消息提醒
+    socket.on('newmsg', (data:any) => {
+      console.log(data);
+      setRecentlyFriend((oldList:any)=>{
+        let idx = oldList.findIndex((item:any)=>{return item.receiver == data.receiver});
+        if(idx != -1){
+          oldList[idx].nestMsg = data.nestMsg;
+          oldList[idx].noreadNumber = data.noreadNumber;
+          oldList[idx].date = data.date;
+          return [...oldList];
+        }else{
+          return [data,...oldList]
+        }
+       
+      });
+    });
+
+    init();
   },[]);
 
-  function gotoDetail(){console.log('22233');
+  function gotoDetail(receiver:any,name:any){
     if(window.isApp){
-      JSSDK.openWebview({url:'/chat_detail',title:'李磊',type:1})
+      JSSDK.openWebview({url:'/chat_detail?receiverName='+name+'&receiver='+receiver,title:'李磊',type:1})
     }else{
-      pageInit({url:'/test-chat.html'});
+      pageInit({url:`/test-chat.html?receiverName=${name}&receiver=${receiver}`});
     }
     
+  }
+
+  console.log(recentlyFriend);
+
+  if(!recentlyFriend){
+    return <Loading />
   }
 
   return (
     <div className={styles['messag-container']}>
       <ul>
-        {mockData.map((item)=>{
+        {recentlyFriend.map((item:any)=>{
           return (
-            <li onClick={(evt: React.MouseEvent)=>{evt.stopPropagation();gotoDetail();}}>
+            <li onClick={(evt: React.MouseEvent)=>{evt.stopPropagation();gotoDetail(item.receiver,item.name);}} key={item.sender}>
               <div className={styles['left']}>
-                <img src={item.imgUrl} alt=""/>
+                <img src={`http://39.99.174.23/common/images/header_${item.receiver}.jpg`} alt=""/>
               </div>
               <div className={styles['right']}>
                 <p className={styles['name']}>{item.name}</p>
-                <p className={styles['new-message']}>{item.latestMsg}</p>
+                <p className={styles['new-message']}>{item.nestMsg}</p>
               </div>
             </li>
           )

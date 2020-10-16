@@ -1,5 +1,5 @@
 import http from './http';
-import {resData, resDataFail, registerRes, getTeacherLisRes} from 'interface/response';
+import {resData, resDataFail, registerRes, getTeacherLisRes, Result} from 'interface/response';
 
 const baseUrl: string = `${window.location.origin}/apiService/forward/api`;
 function joint(obj_1:object,obj_2:object){
@@ -25,4 +25,12 @@ export function getTeacherDetail(data:any):Promise<resData<getTeacherLisRes> | r
   return http.post(baseUrl,joint({snType:'sas',serviceName:'serviceName.teacher.teacherDetail'},data));
 }
 
+//查询最近联系好友列表
+export function getRecentList(data:any):Promise<resData<Result> | resDataFail>{
+  return http.post(baseUrl,joint({snType:'sas',serviceName:'serviceName.chat.recentlist'},data));
+}
 
+//查询历史聊天记录
+export function getHistoryChat(data:any):Promise<resData<Result> | resDataFail>{
+  return http.post(baseUrl,joint({snType:'sas',serviceName:'serviceName.chat.chatdetail'},data));
+}

@@ -3,7 +3,7 @@ import ReactDom from 'react-dom';
 import cns from 'classnames';
 import Hoc from 'components/Hoc';
 import Loading from 'components/Loading';
-import {  getUrlQuery } from 'utils/tool';
+import {  getUrlQuery,pageInit } from 'utils/tool';
 import styles from './td.less';
 import {getTeacherDetail} from 'apiService/service';
 import {getTeacherLisRes,Result} from 'interface/response';
@@ -91,7 +91,18 @@ function TeacherDetail(){
 
       {/* 底部区域 */}
       <div className={styles.footer}>
-        <span className={styles.appoint} onClick={(evt: React.MouseEvent)=>{evt.stopPropagation(); JSSDK.openWebview({url:'/chat_detail',title:teacherDetail.name,type:1})}}>找他聊聊</span>
+        <span className={styles.appoint} 
+          onClick={(evt: React.MouseEvent)=>{
+            evt.stopPropagation(); 
+            if(window.isApp){
+              JSSDK.openWebview({url:'/chat_detail?receiver='+teacherDetail.key,title:teacherDetail.name,type:1})
+            }else{
+              pageInit({url:`/test-chat.html?receiverName=${teacherDetail.name}&receiver=${teacherDetail.key}`});
+            }
+          }
+          }
+            
+          >找他聊聊</span>
         {/* <span className={styles.order}>去发单</span> */}
       </div>
     </div>

@@ -57,8 +57,8 @@ const devConfig = {
     open: true,
     proxy: {
       '/apiService': {
-        target: 'http://39.99.174.23:8888',
-        // target: 'http://localhost:8888',
+        // target: 'http://39.99.174.23:8888',
+        target: 'http://localhost:8888',
         pathRewrite: {'/apiService':''}
       }
     

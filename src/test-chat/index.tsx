@@ -3,6 +3,7 @@ import ReactDom from 'react-dom';
 import cns from 'classnames';
 import Hoc from 'components/Hoc';
 import {storage,getUrlQuery} from 'utils/tool';
+import {getHistoryChat} from 'apiService/service';
 import styles from './tc.less';
 import io from 'socket.io-client';
 
@@ -25,7 +26,9 @@ let meslist = [
 
 function TestChat(){
   //获取聊天对象id
-  const {sender,receiver} = getUrlQuery();
+  const {receiver,receiverName} = getUrlQuery();
+  const userName = storage.get(['username']).username;
+  const sender = storage.get(['token']).token;
 
   //存储socket对象
   const socK = useRef<any>();
@@ -34,27 +37,43 @@ function TestChat(){
   //输入框输入的文本内容
   const [inputStr, setInputStr] = useState('');
   //消息列表数组
-  const [msgList, setmsgList] = useState<any[]>([]);
+  const [msgList, setmsgList] = useState<any>([]);
+
+  //数据初始化
+  async function init(){
+    try{
+      const {result} = await getHistoryChat({senderKey: sender,receiverKey:receiver});
+      console.log('初始化获取聊天记录结果为：',result);
+      setmsgList(result);
+      scrollDom.current.scrollTop = scrollDom.current.scrollHeight - scrollDom.current.offsetHeight;
+    }catch(err){
+      console.log('初始获取聊天记录时出错',err);
+    }
+  }
 
   //组件初始化
   useEffect(()=>{
     //创建websocket对象
-    let socket = io.connect('http://localhost:3001/chat',{query:{sender:sender}});
+    let socket = io.connect('http://localhost:3001/chat',{query:{sender:sender,typeCon:'detail'}});
     socK.current = socket;
     socket.on('connect', function () {
       console.log('链接成功');
     });
     
+    //进入页面时，修改清除未读消息
+    socket.emit('updataunread',{sender:sender,receiver: receiver});
     // 监听message事件
     socket.on('message', (data:any) => {
       // console.log('222');
       // console.log(data);
-      setmsgList((oldMsg)=>{
+      setmsgList((oldMsg:any)=>{
         return [...oldMsg,data];
       });
       // console.log(scrollDom.current.scrollTop,scrollDom.current.scrollHeight,scrollDom.current.offsetHeight);
       scrollDom.current.scrollTop = scrollDom.current.scrollHeight - scrollDom.current.offsetHeight;
     });
+
+    init();
   },[]);
 
 //发送消息
@@ -63,7 +82,8 @@ function sendMsg(){
     sender: sender,
     receiver: receiver,
     msg: inputStr,
-    headerImg: `http://39.99.174.23/common/images/header_${sender}.jpg`,
+    receivername: receiverName,
+    sendername: userName
   });
   //发送完消息后清空输入字符串
   setInputStr('');
@@ -84,9 +104,9 @@ function handInputMsg(e:React.ChangeEvent<HTMLTextAreaElement>){
               msgList.map((item,idx) => {
                 return (
                   <li key={idx} className={cns(styles['msg-item'], item.sender == sender ? styles['isme'] : '')}>
-                   {item.receiver == sender && <img src={item.headerImg} alt=""/>}
+                   {item.receiver == sender && <img src={`http://39.99.174.23/common/images/header_${item.sender}.jpg`} alt=""/>}
                     <span>{item.msg}</span>
-                    {item.sender == sender && <img src={item.headerImg} alt=""/>}
+                    {item.sender == sender && <img src={`http://39.99.174.23/common/images/header_${item.sender}.jpg`} alt=""/>}
                   </li>
                 )
               })
