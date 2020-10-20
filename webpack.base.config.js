@@ -61,7 +61,7 @@ const baseConfig = {
     plugins:[
         new CleanWebpackPlugin(),
         new webpack.DefinePlugin({
-            "EVN": JSON.stringify(process.env.NODE_ENV)
+            EVN: JSON.stringify(process.env.NODE_ENV)
           }),
     ].concat(htmlPage),
    

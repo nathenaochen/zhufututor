@@ -97,7 +97,7 @@ function TeacherDetail(){
             if(window.isApp){
               JSSDK.openWebview({url:'/chat_detail?receiver='+teacherDetail.key,title:teacherDetail.name,type:1})
             }else{
-              pageInit({url:`/test-chat.html?receiverName=${teacherDetail.name}&receiver=${teacherDetail.key}`});
+              pageInit({url:`test-chat.html?receiverName=${teacherDetail.name}&receiver=${teacherDetail.key}`});
             }
           }
           }

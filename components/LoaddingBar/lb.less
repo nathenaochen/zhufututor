@@ -1,0 +1,26 @@
+.loaddingbar{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  .text{
+    font-size: 28px;
+    margin-right: 10px;
+    color: #ccc;
+  }
+
+  .loading-img{
+    width: 30px;
+    height: 30px;
+    // border: 1px solid red;/**no**/
+    background-image: url('./image/loadding.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    animation: loadding 1s ease infinite;
+  }
+}
+
+@keyframes loadding {
+  0% { transform: rotate(0) }
+  100% { transform: rotate(360deg); }
+}

@@ -11,7 +11,7 @@
       "utils/*":["utils/*"],
     },
     "esModuleInterop":true, //esModuleInterop选项的作用是支持使用import d from 'cjs'的方式引入commonjs包。
-    "strict": true
+    // "strict": true       //隐士any参数也会报错
   },
   "exclude": ["node_modules"]
 }

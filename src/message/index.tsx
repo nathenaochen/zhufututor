@@ -5,7 +5,7 @@ import { pageInit } from 'utils/tool';
 import Hoc from 'components/Hoc';
 import Loading from 'components/Loading';
 import io from 'socket.io-client';
-import {storage,getUrlQuery} from 'utils/tool';
+import {storage,getUrlQuery,timeFromat} from 'utils/tool';
 import styles from './msg.less';
 import {getRecentList} from 'apiService/service';
 
@@ -116,7 +116,7 @@ function MessageList(){
     }})
 
     //创建websocket对象
-    let socket = io.connect('http://localhost:3001/chat',{query:{sender:sender,typeCon:'list'}});
+    let socket = io.connect(EVN == 'development'?'http://localhost:3001/chat':'http://39.99.174.23:3001/chat',{query:{sender:sender,typeCon:'list'}});
     socK.current = socket;
     socket.on('connect', function () {
       console.log('链接成功');
@@ -145,7 +145,7 @@ function MessageList(){
     if(window.isApp){
       JSSDK.openWebview({url:'/chat_detail?receiverName='+name+'&receiver='+receiver,title:'李磊',type:1})
     }else{
-      pageInit({url:`/test-chat.html?receiverName=${name}&receiver=${receiver}`});
+      pageInit({url:`test-chat.html?receiverName=${name}&receiver=${receiver}`});
     }
     
   }
@@ -162,12 +162,18 @@ function MessageList(){
         {recentlyFriend.map((item:any)=>{
           return (
             <li onClick={(evt: React.MouseEvent)=>{evt.stopPropagation();gotoDetail(item.receiver,item.name);}} key={item.sender}>
-              <div className={styles['left']}>
-                <img src={`http://39.99.174.23/common/images/header_${item.receiver}.jpg`} alt=""/>
+              <div className={styles['msg']}>
+                <div className={styles['left']}>
+                  <img src={`http://39.99.174.23/common/images/header_${item.receiver}.jpg`} alt=""/>
+                </div>
+                <div className={styles['right']}>
+                  <p className={styles['name']}>{item.name}</p>
+                  <p className={styles['new-message']}>{item.nestMsg}</p>
+                </div>
               </div>
-              <div className={styles['right']}>
-                <p className={styles['name']}>{item.name}</p>
-                <p className={styles['new-message']}>{item.nestMsg}</p>
+              <div className={styles['tips']}>
+                <p className={styles['time']}>{timeFromat(item.date)}</p>
+                {item.noreadNumber != 0 &&  <p className={styles['noread-msg']}>{item.noreadNumber}</p>}
               </div>
             </li>
           )

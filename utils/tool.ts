@@ -102,3 +102,75 @@ export function px(rawPx:number,relativeSize = 75):number{
     return valObj;
    }
  }
+
+ /**
+  *  时间格式化
+  *  */
+export function format(data:any,type = 'y3',cf = '-'){
+  let time = data ? new Date(+data) : new Date();
+  let year = time.getFullYear();//年
+  let month:string | number = time.getMonth() + 1;//月
+  let day:string | number = time.getDate();//日
+  let hour:string | number = time.getHours();//时
+  let min:string | number = time.getMinutes();//分
+  let sec:string | number = time.getSeconds();//秒
+
+  month = month < 10 ? `0${month}` : month;
+  day = day < 10 ? `0${day}` : day;
+  hour = hour < 10 ? `0${hour}` : hour;
+  min = min < 10 ? `0${min}` : min;
+  sec = sec < 10 ? `0${sec}` : sec;
+
+  let timeObj:any = {
+    'y1': `${year}`,
+    'y2': `${year}${cf}${month}`,
+    'y3': `${year}${cf}${month}${cf}${day}`,
+    'y4': `${year}${cf}${month}${cf}${day} ${hour}`,
+    'y5': `${year}${cf}${month}${cf}${day} ${hour}:${min}`,
+    'y6': `${year}${cf}${month}${cf}${day} ${hour}:${min}:${sec}`,
+    'm1': `${month}`,
+    'm2': `${month}${cf}${day}`,
+    'h2': `${hour}:${min}`
+  }
+  
+  return timeObj[type];
+
+}
+
+/**
+ * 判断时间是不会是今天
+ */
+export function isToday(time:any = +new Date(), server_time:any = +new Date()){
+  return new Date(time).toLocaleDateString() === new Date(server_time).toLocaleDateString();
+}
+
+/**
+ * 时间格式转换
+ */
+export function timeFromat(time:any,server_time?:any){
+  if(!time){
+    return '--'
+  }
+
+  //传过来的时间
+  let formatTime = new Date(+time);
+  let year = formatTime.getFullYear();//年
+  let hour = formatTime.getHours();//时
+  let min = formatTime.getMinutes();//分
+
+  //现在的时间
+  let nowtTime = server_time ? new Date(+server_time) : new Date();
+  let nowyear = nowtTime.getFullYear();//年
+  let nowhour = nowtTime.getHours();//时
+  let nowmin = nowtTime.getMinutes();//分
+
+  if(isToday(formatTime)){
+    return format(formatTime,'h2',':');
+  }else{
+    if(year == nowyear){
+      return format(formatTime,'m2');
+    }else{
+      return format(formatTime,'y3');
+    }
+  }
+}
