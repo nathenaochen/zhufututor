@@ -38,6 +38,10 @@ const pages = [
       'pageName': 'test-chat'
     },
     {
+      'title':'学生详情页',
+      'pageName': 'student-detail'
+    },
+    {
       'title':'Jssdk Test',
       'pageName': 'webviewtest'
     }

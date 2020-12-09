@@ -112,7 +112,7 @@ function MessageList(){
       sender.current = storage.get(['token']).token;
     }
     //创建websocket对象
-    let socket = io.connect(EVN == 'development'?'http://localhost:3001/chat':'http://39.99.174.23:3001/chat',{query:{sender:sender.current,typeCon:'list'}});
+    let socket = io.connect(EVN == 'development'?'http://39.99.174.23:3001/chat':'http://39.99.174.23:3001/chat',{query:{sender:sender.current,typeCon:'list'}});
     socK.current = socket;
     socket.on('connect', function () {
       console.log('链接成功');
@@ -155,6 +155,7 @@ function MessageList(){
   useEffect(()=>{
     JSSDK.onappear({cb:()=>{
       console.log('message---onappear');
+      init();
     }})
 
     getSenderId();
@@ -170,7 +171,6 @@ function MessageList(){
     
   }
 
-  console.log(recentlyFriend);
 
   if(!recentlyFriend){
     return <Loading />

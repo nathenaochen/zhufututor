@@ -47,3 +47,17 @@ export interface getTeacherLisRes{
   teach_feature: string;
   zuoyouming: string;
 }
+
+//获取教学生列表返回数据
+export interface getStudentLisRes{
+  name: string;
+  sex: string;
+  free_time: string;
+  class: string;
+  subject: string;
+  header_img: string;
+  charge: string;
+  key:string;
+  request:string;
+  zuoyouming: string;
+}

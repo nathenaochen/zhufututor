@@ -15,9 +15,9 @@ function Hoc(WrapComponent:FunctionComponent<globalData>){
 
     async function init(){ 
       let globEvent = new myEventEmitter();
-      window.globEvent = globEvent;console.log('isapp');
+      window.globEvent = globEvent;
       let isApp = await checkIsApp();
-      console.log('isapp',isApp);
+      console.log('isapp--hoc',isApp);
       window.isApp = isApp;
     }
 

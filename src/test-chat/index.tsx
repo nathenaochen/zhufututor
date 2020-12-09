@@ -65,7 +65,7 @@ function TestChat(){
   //组件初始化
   useEffect(()=>{
     //创建websocket对象　
-    let socket = io.connect(EVN == 'development'?'http://localhost:3001/chat':'http://39.99.174.23:3001/chat',{query:{sender:sender,typeCon:'detail',receiver: receiver}});
+    let socket = io.connect(EVN == 'development'?'http://39.99.174.23:3001/chat':'http://39.99.174.23:3001/chat',{query:{sender:sender,typeCon:'detail',receiver: receiver}});
     socK.current = socket;
     socket.on('connect', function () {
       console.log('链接成功');
