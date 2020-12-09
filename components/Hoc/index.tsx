@@ -2,6 +2,7 @@ import React,{useState, useEffect, FunctionComponent} from 'react';
 import '../../pageconfig/init.css';
 import Vconsole from 'vconsole';
 import {checkIsApp} from 'utils/tool';
+import {myEventEmitter} from 'utils/eventEmitter'
 
 interface globalData {
   a:number,
@@ -12,7 +13,9 @@ function Hoc(WrapComponent:FunctionComponent<globalData>){
   return () => {
 
 
-    async function init(){
+    async function init(){ 
+      let globEvent = new myEventEmitter();
+      window.globEvent = globEvent;console.log('isapp');
       let isApp = await checkIsApp();
       console.log('isapp',isApp);
       window.isApp = isApp;

@@ -5,7 +5,7 @@ import NoLogin from 'components/NoLogin';
 import Loading from 'components/Loading';
 import styles from './index.less';
 import Cart from './components/cart/index';
-import { pageInit, px, getUrlQuery, storage } from 'utils/tool';
+import { pageInit, px, getUrlQuery, checkIsApp,storage } from 'utils/tool';
 import {getTeacherList} from 'apiService/service';
 import {getTeacherLisRes,Result} from 'interface/response';
 
@@ -18,9 +18,12 @@ function Index(){
 
   async function init() {
     let loginStatus;
+    const isApp = await checkIsApp();
+    console.log('index',loginStatus,isApp);
     //检查是否有登录态
-    if(window.isApp){
+    if(isApp){
       loginStatus = await JSSDK.getFileData({key:['role']});
+      console.log('index',loginStatus);
     }else{
       loginStatus = storage.get(['role']);
     }

@@ -4,7 +4,7 @@ import cns from 'classnames';
 import Hoc from 'components/Hoc';
 import Dailog from 'components/Dailog';
 import styles from './lp.less';
-import {pageInit, storage} from 'utils/tool';
+import {pageInit, checkIsApp,storage} from 'utils/tool';
 import {login} from 'apiService/service';
 
 interface BtnAttr {
@@ -41,11 +41,12 @@ function LoginPage(){
 
   //初始化
   async function init(){
+    const isApp = await checkIsApp();
     //设置随机验证码
     setAuthCode(()=>{
       return createCode();
     });
-    if(window.isApp){
+    if(isApp){
       const {account} = await JSSDK.getFileData({key:['account']});
       account != null && setUserAccount(account);
     }else{

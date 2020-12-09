@@ -5,7 +5,7 @@ import { pageInit } from 'utils/tool';
 import Hoc from 'components/Hoc';
 import Loading from 'components/Loading';
 import io from 'socket.io-client';
-import {storage,getUrlQuery,timeFromat} from 'utils/tool';
+import {storage,getUrlQuery,checkIsApp,timeFromat} from 'utils/tool';
 import styles from './msg.less';
 import {getRecentList} from 'apiService/service';
 
@@ -90,33 +90,29 @@ let mockData: itemData[] = [
 
 function MessageList(){
 
-  const sender = storage.get(['token']).token;
+ 
 
   //存储socket对象
   const socK = useRef<any>();
 
+  //存储senderd的id
+  const sender = useRef<any>();
+
   //最近联系好友列表
   const [recentlyFriend, setRecentlyFriend] = useState<any>();
 
-  //数据初始化
-  async function init(){
-    try{
-      const {result} = await getRecentList({senderKey:sender});
-      console.log('获取最近好友列表结果',result);
-      setRecentlyFriend(result);
-    }catch(err){
-      console.log('获取最近好友列表结果报错',err)
+  //获取sender的id
+  async function getSenderId(){
+    const isApp = await checkIsApp();
+    if(isApp){
+      sender.current = await JSSDK.getFileData({key:['token']});
+      sender.current = sender.current.token;
+      console.log(sender.current,'sender.current');
+    }else{
+      sender.current = storage.get(['token']).token;
     }
-  }
-
-  //组件初始化
-  useEffect(()=>{
-    JSSDK.onappear({cb:()=>{
-      console.log('message---onappear');
-    }})
-
     //创建websocket对象
-    let socket = io.connect(EVN == 'development'?'http://localhost:3001/chat':'http://39.99.174.23:3001/chat',{query:{sender:sender,typeCon:'list'}});
+    let socket = io.connect(EVN == 'development'?'http://localhost:3001/chat':'http://39.99.174.23:3001/chat',{query:{sender:sender.current,typeCon:'list'}});
     socK.current = socket;
     socket.on('connect', function () {
       console.log('链接成功');
@@ -130,6 +126,9 @@ function MessageList(){
           oldList[idx].nestMsg = data.nestMsg;
           oldList[idx].noreadNumber = data.noreadNumber;
           oldList[idx].date = data.date;
+          oldList.sort((a,b)=>{
+            return b.date - a.date
+          });
           return [...oldList];
         }else{
           return [data,...oldList]
@@ -137,13 +136,34 @@ function MessageList(){
        
       });
     });
-
+    
     init();
+  }
+
+  //数据初始化
+  async function init(){
+    try{
+      const {result} = await getRecentList({senderKey:sender.current});
+      console.log('获取最近好友列表结果',result);
+      setRecentlyFriend(result);
+    }catch(err){
+      console.log('获取最近好友列表结果报错',err)
+    }
+  }
+
+  //组件初始化
+  useEffect(()=>{
+    JSSDK.onappear({cb:()=>{
+      console.log('message---onappear');
+    }})
+
+    getSenderId();
   },[]);
 
   function gotoDetail(receiver:any,name:any){
     if(window.isApp){
-      JSSDK.openWebview({url:'/chat_detail?receiverName='+name+'&receiver='+receiver,title:'李磊',type:1})
+      JSSDK.openWebview({url:'/chat_detail?receiver='+receiver,title:name,type:1})
+      // pageInit({url:`test-chat.html?receiverName=${name}&receiver=${receiver}`});
     }else{
       pageInit({url:`test-chat.html?receiverName=${name}&receiver=${receiver}`});
     }

@@ -71,7 +71,7 @@ function TestChat(){
       console.log('链接成功');
     });
     
-    //进入页面时，修改清除未读消息
+    //进入页面时，修改清 除未读消息
     socket.emit('updataunread',{sender:sender,receiver: receiver});
     // 监听message事件
     socket.on('message', (data:any) => {

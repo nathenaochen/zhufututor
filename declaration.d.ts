@@ -10,3 +10,4 @@ declare module '*.png';
 declare var JSSDK:any;
 declare var isApp:boolean;
 declare var EVN:string;
+declare var globEvent:any;
