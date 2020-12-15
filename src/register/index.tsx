@@ -5,7 +5,7 @@ import Hoc from 'components/Hoc';
 import Dailog from 'components/Dailog';
 import styles from './reg.less';
 import {pageInit,storage} from 'utils/tool';
-import {register} from 'apiService/service';
+import {register,completeTeacherMessage,completeStudentMessage} from 'apiService/service';
 
 interface BtnAttr {
   text: string;   //按钮文字
@@ -38,6 +38,7 @@ function Register(){
    const dailogMsg = useRef<DailogProps>({});
 
   function handleChange(e:React.ChangeEvent<HTMLInputElement>, type:string){
+    console.log(e.target.value,pwd,pwdNo);
     let value = e.target.value;
     if(type == 'first'){
       //记录实际密码值
@@ -49,11 +50,11 @@ function Register(){
         }
       });
       //记录隐藏密码
-      setPwdNo((pwd)=>{
-        if(pwd.length > value.length){//判断是否输入的是删除
-          return pwd.slice(0,pwd.length - 1);
+      setPwdNo((pwdNo)=>{
+        if(pwdNo.length > value.length){//判断是否输入的是删除
+          return pwdNo.slice(0,pwdNo.length - 1);
         }else{
-          return pwd + '*';
+          return pwdNo + '*';
         }
       });
     }else{
@@ -100,12 +101,22 @@ function Register(){
       const {code, result} = await register({username:userName,password:pwd,passwordSure:pwdSure,type:type});
       console.log('注册返回结果',result,result?.user?.account);
       if(code == '0'){
+        if(isApp){
+          JSSDK.writeData({account:result?.user?.account,token:'',role:'',username: ''});
+        }else{
+          storage.set({account:result?.user?.account,token:'',role:'',username: ''}); //非app内
+        }
+        if(result.user.type == 'teacher'){
+          const res = completeTeacherMessage({key:result.user.key,account: result.user.account,name:result.user.username});
+        }else{
+          const res = completeStudentMessage({key:result.user.key,account: result.user.account,name:result.user.username});
+        }
+        
+        
         dailogMsg.current.title = `恭喜您注册成功`;
         dailogMsg.current.message = `您的账号是 ${result?.user?.account}`;
         dailogMsg.current.btns = [{text:'马上登陆',action:()=>{pageInit({url:'login-page.html',needclose:2,hasInput:true})}},{text:'绑定电话', action: ()=>{pageInit({url:'setting.html',needclose:2})}}];
         setShowDailog(true);
-        JSSDK.writeData({account:result?.user?.account,token:'',role:'',username: ''});
-        storage.set({account:result?.user?.account,token:'',role:'',username: ''}); //非app内
       }else{
         dailogMsg.current.message = `${result?.errorMeg}`;
         dailogMsg.current.btns = [{text:'确定',action:()=>{setShowDailog(false)}}];
@@ -118,6 +129,8 @@ function Register(){
       setShowDailog(true);
     }
   }
+
+  console.log(pwdNo,pwd,'pwdNo');
 
   return (
     <div>
@@ -133,7 +146,7 @@ function Register(){
           <li className={styles['login-item']}>
             <span></span>
             <input  type="url" placeholder='请输入密码' value={pwdNo} 
-              onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{handleChange(e,'first')}}/>
+              onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{e.stopPropagation();handleChange(e,'first')}}/>
           </li>
           <li className={styles['login-item']}>
             <span></span>

@@ -160,9 +160,9 @@ function handInputMsg(e:React.ChangeEvent<HTMLTextAreaElement>){
               msgList.map((item:any,idx:any) => {
                 return (
                   <li key={idx} className={cns(styles['msg-item'], item.sender == sender ? styles['isme'] : '')}>
-                   {item.receiver == sender && <img src={`http://39.99.174.23/common/images/header_${item.sender}.jpg`} alt=""/>}
+                   {item.receiver == sender && <img src={`http://39.99.174.23/zhifututor/common/images/${item.sender}.png`} alt=""/>}
                     <span>{item.msg}</span>
-                    {item.sender == sender && <img src={`http://39.99.174.23/common/images/header_${item.sender}.jpg`} alt=""/>}
+                    {item.sender == sender && <img src={`http://39.99.174.23/zhifututor/common/images/${item.sender}.png`} alt=""/>}
                   </li>
                 )
               })

@@ -42,6 +42,10 @@ const pages = [
       'pageName': 'student-detail'
     },
     {
+      'title':'信息完善',
+      'pageName': 'complete-message'
+    },
+    {
       'title':'Jssdk Test',
       'pageName': 'webviewtest'
     }

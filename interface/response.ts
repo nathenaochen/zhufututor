@@ -60,4 +60,5 @@ export interface getStudentLisRes{
   key:string;
   request:string;
   zuoyouming: string;
+  account: string;
 }

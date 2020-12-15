@@ -3,6 +3,7 @@ import cns from 'classnames';
 import styles from './cart.less';
 import {pageInit} from 'utils/tool';
 import {getTeacherLisRes} from 'interface/response';
+import headerImg from './images/1.jpg';
 
 interface CardProps {
   teacher: getTeacherLisRes;
@@ -24,16 +25,16 @@ export default function Cart(props:CardProps){
     <div className={styles.cart} onClick={(e:React.MouseEvent)=>{e.stopPropagation();gotoDetail(teacher.key);}}> 
       <div className={styles['left']}>
         <div className={styles.image}>
-          <img src={teacher.header_img} alt=""/>  
+          <img src={teacher.header_img || '' } alt="" onError={(e:any)=>{e.target.onError = null; e.target.src=headerImg}}/>  
         </div>
-        <p className={styles.level}>{teacher.teacher_level}</p>
+        {teacher.teacher_level && <p className={styles.level}>{teacher.teacher_level}</p>}
       </div>
       <div className={styles['right']}>
         <div className={styles['title']}>
           <span className={styles['name']}>{teacher.name}</span>
           <span className={cns(styles['sex'],teacher.sex == '0' ? styles['girl'] : styles['boy'])}></span>
           {
-            teacher.free_time.split(',').map((item)=>{
+            teacher.free_time && teacher.free_time.split(',').map((item)=>{
               return  <span className={styles['time']}>{item}</span>
             })
           }
@@ -49,20 +50,20 @@ export default function Cart(props:CardProps){
         <div className={styles['terch-rang']}>
           <p className={styles['grade']}>
             {
-              teacher.teach_class.split(',').map((item)=>{
+              teacher.teach_class ? teacher.teach_class.split(',').map((item)=>{
                 return (
                 <span>{item}</span>
                 )
-              })
+              }) : <span>暂无</span>
             }
           </p>
           <p className={styles['subject']}>
             {
-              teacher.teach_project.split(',').map((item)=>{
+              teacher.teach_project ? teacher.teach_project.split(',').map((item)=>{
                 return (
                 <span>{item}</span>
                 )
-              })
+              }) : <span>暂无</span>
             }
           </p>
         </div>

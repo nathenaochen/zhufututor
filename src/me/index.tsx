@@ -10,7 +10,8 @@ import jssdkImg from './images/jssdk_test.png';
 import personInfo from './images/person_info_edit.png';
 import setting from './images/setting.png';
 import tel from './images/tel.png';
-import {pageInit} from 'utils/tool';
+import {pageInit, storage} from 'utils/tool';
+import headerImg from './images/6.png';
 
 let items = [
   {
@@ -30,7 +31,22 @@ let items = [
   {
     desc:'完善信息',
     imgUrl: personInfo,
-    clickFun: ()=>{
+    clickFun: async()=>{
+      let loginStatus;
+      if(isApp){
+        loginStatus = await JSSDK.getFileData({key:['role']});
+      }else{
+        loginStatus = storage.get(['role']);
+      }
+      if(loginStatus.role != null){
+        if(loginStatus.role == 'student'){
+          pageInit({url:'complete-message.html?type=student'})
+        }else if(loginStatus.role == 'teacher'){
+          pageInit({url:'complete-message.html?type=teacher'})
+        }
+      }else{
+        pageInit({url:'login-page.html'})
+      }
       
     }
   },
@@ -55,6 +71,7 @@ let items = [
       pageInit({url:'webviewtest.html'});
     }
   },
+
 ]
 
 function Me(){
@@ -73,7 +90,7 @@ function Me(){
       <div className={styles['content']}>
         <div className={styles['header']}>
           <div className={styles['header-img']}>
-              <img src="../../common/images/header.jpg" alt=""/>
+              <img src={headerImg} alt=""/>
           </div>
           <div className={styles['info']}>
             <p className={styles['name']}>NathenAoChen</p>

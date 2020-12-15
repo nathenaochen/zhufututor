@@ -29,22 +29,22 @@ function StudentCart(props:StudentCardProps){
             <span className={styles['name']}>{student.name}</span>
             <span className={cns(styles['sex'],student.sex == '0' ? styles['girl'] : styles['boy'])}></span>
             {
-              student.free_time.split(',').map((item)=>{
+              student.free_time ? student.free_time.split(',').map((item)=>{
                 return  <span className={styles['time']}>{item}</span>
-              })
+              }) : <span className={styles['time']}>周末</span>
             }
           </div>
           <div className={styles['student-rang']}>
             <p className={styles['grade']}>
-              <span>{student.class}</span>
+              <span>{student.class ? student.class : '暂无'}</span>
             </p>
             <p className={styles['subject']}>
               {
-                student.subject.split(',').map((item)=>{
+                student.subject ? student.subject.split(',').map((item)=>{
                   return (
                   <span>{item}</span>
                   )
-                })
+                }) : <span>暂无</span>
               }
             </p>
         </div>

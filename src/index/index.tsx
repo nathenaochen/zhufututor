@@ -7,24 +7,12 @@ import styles from './index.less';
 import Cart from './components/cart/index';
 import StudentCart from './components/StudentCart';
 import { pageInit, px, getUrlQuery, checkIsApp,storage } from 'utils/tool';
-import {getTeacherList} from 'apiService/service';
+import {getTeacherList,getStudentList} from 'apiService/service';
 import {getTeacherLisRes,Result,getStudentLisRes} from 'interface/response';
-
-var obj : getStudentLisRes=  {
-  name: 'Lilei',
-  sex: '0',
-  free_time: '星期一,星期二',
-  class: '初三',
-  subject: '数学,英语',
-  header_img: 'http://39.99.174.23/common/images/header.jpg',
-  charge: '100',
-  request: '重点本科',
-  key: '5fd02f15f6890d1246cee9fc',
-  zuoyouming: '没有最好，只有更好'
-}
 
 function Index(){
 
+  //用于存储登录状态
   const msgObj = useRef<any>({});
 
   //教师列表数据
@@ -57,7 +45,15 @@ function Index(){
           setTeacherList([]);
         }
       }else if(loginStatus.role == 'teacher'){
-        setStudentList([obj]);
+        //获取学生列表
+        const {code, result} = await getStudentList({});
+        console.log('学生列表',result);
+        if(+code == 0){
+          setStudentList(result);
+        }else{
+          setStudentList([]);
+        }
+        
       }
     }else{
       setTeacherList([]);

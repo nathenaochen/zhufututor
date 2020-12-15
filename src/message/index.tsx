@@ -4,6 +4,7 @@ import cns from 'classnames';
 import { pageInit } from 'utils/tool';
 import Hoc from 'components/Hoc';
 import Loading from 'components/Loading';
+import NoLogin from 'components/NoLogin';
 import io from 'socket.io-client';
 import {storage,getUrlQuery,checkIsApp,timeFromat} from 'utils/tool';
 import styles from './msg.less';
@@ -110,36 +111,57 @@ function MessageList(){
       console.log(sender.current,'sender.current');
     }else{
       sender.current = storage.get(['token']).token;
+      console.log(sender.current,'sender.current');
     }
-    //创建websocket对象
-    let socket = io.connect(EVN == 'development'?'http://39.99.174.23:3001/chat':'http://39.99.174.23:3001/chat',{query:{sender:sender.current,typeCon:'list'}});
-    socK.current = socket;
-    socket.on('connect', function () {
-      console.log('链接成功');
-    });
-    // 监听newmsg事件,新消息提醒
-    socket.on('newmsg', (data:any) => {
-      console.log(data);
-      setRecentlyFriend((oldList:any)=>{
-        let idx = oldList.findIndex((item:any)=>{return item.receiver == data.receiver});
-        if(idx != -1){
-          oldList[idx].nestMsg = data.nestMsg;
-          oldList[idx].noreadNumber = data.noreadNumber;
-          oldList[idx].date = data.date;
-          oldList.sort((a,b)=>{
-            return b.date - a.date
-          });
-          return [...oldList];
-        }else{
-          return [data,...oldList]
-        }
-       
+    if(sender.current != null){
+      //创建websocket对象
+      let socket = io.connect(EVN == 'development'?'http://39.99.174.23:3001/chat':'http://39.99.174.23:3001/chat',{query:{sender:sender.current,typeCon:'list'}});
+      socK.current = socket;
+      socket.on('connect', function () {
+        console.log('链接成功');
       });
-    });
-    
-    init();
+      // 监听newmsg事件,新消息提醒
+      socket.on('newmsg', (data:any) => {
+        console.log(data);
+        setRecentlyFriend((oldList:any)=>{
+          let idx = oldList.findIndex((item:any)=>{return item.receiver == data.receiver});
+          if(idx != -1){
+            oldList[idx].nestMsg = data.nestMsg;
+            oldList[idx].noreadNumber = data.noreadNumber;
+            oldList[idx].date = data.date;
+            oldList.sort((a,b)=>{
+              return b.date - a.date
+            });
+            return [...oldList];
+          }else{
+            return [data,...oldList]
+          }
+        
+        });
+      });
+      
+      init();
+    }else{
+      setRecentlyFriend([]);
+    }
   }
 
+  //更新id
+  async function updataId(cb){
+    const isApp = await checkIsApp();
+    if(isApp){
+      sender.current = await JSSDK.getFileData({key:['token']});
+      sender.current = sender.current.token;
+      console.log(sender.current,'sender.current');
+    }else{
+      sender.current = storage.get(['token']).token;
+    }
+    if(sender.current != null){
+      cb()
+    }else{
+      setRecentlyFriend([]);
+    }
+  }  
   //数据初始化
   async function init(){
     try{
@@ -155,7 +177,7 @@ function MessageList(){
   useEffect(()=>{
     JSSDK.onappear({cb:()=>{
       console.log('message---onappear');
-      init();
+      updataId(init)
     }})
 
     getSenderId();
@@ -178,28 +200,31 @@ function MessageList(){
 
   return (
     <div className={styles['messag-container']}>
-      <ul>
-        {recentlyFriend.map((item:any)=>{
-          return (
-            <li onClick={(evt: React.MouseEvent)=>{evt.stopPropagation();gotoDetail(item.receiver,item.name);}} key={item.sender}>
-              <div className={styles['msg']}>
-                <div className={styles['left']}>
-                  <img src={`http://39.99.174.23/common/images/header_${item.receiver}.jpg`} alt=""/>
-                </div>
-                <div className={styles['right']}>
-                  <p className={styles['name']}>{item.name}</p>
-                  <p className={styles['new-message']}>{item.nestMsg}</p>
-                </div>
-              </div>
-              <div className={styles['tips']}>
-                <p className={styles['time']}>{timeFromat(item.date)}</p>
-                {item.noreadNumber != 0 &&  <p className={styles['noread-msg']}>{item.noreadNumber}</p>}
-              </div>
-            </li>
-          )
-        })
+      {sender.current != null ?
+        <ul>
+          {recentlyFriend.length > 0 ?
+            recentlyFriend.map((item:any)=>{
+              return (
+                <li onClick={(evt: React.MouseEvent)=>{evt.stopPropagation();gotoDetail(item.receiver,item.name);}} key={item.sender}>
+                  <div className={styles['msg']}>
+                    <div className={styles['left']}>
+                      <img src={`http://39.99.174.23/zhifututor/common/images/${item.receiver}.png`} alt=""/>
+                    </div>
+                    <div className={styles['right']}>
+                      <p className={styles['name']}>{item.name}</p>
+                      <p className={styles['new-message']}>{item.nestMsg}</p>
+                    </div>
+                  </div>
+                  <div className={styles['tips']}>
+                    <p className={styles['time']}>{timeFromat(item.date)}</p>
+                    {item.noreadNumber != 0 &&  <p className={styles['noread-msg']}>{item.noreadNumber}</p>}
+                  </div>
+                </li>
+              )
+            }) : <div className={styles['no-data']}>暂无聊天好友</div>
+        }
+        </ul>  : <NoLogin />
       }
-      </ul>
     </div>
   )
 }
