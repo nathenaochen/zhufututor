@@ -168,7 +168,7 @@ function CompleteMessage(props){
         </ul>
       }
 
-      <p className={styles['button']} onClick={(e)=>{e.stopPropagation();handClick(e);}}>确认修改</p>
+      {/* <p className={styles['button']} onClick={(e)=>{e.stopPropagation();handClick(e);}}>确认修改</p> */}
 
       <Dailog  visable={showDailog} >
         <div className={styles['box']}>
