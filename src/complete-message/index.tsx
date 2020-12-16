@@ -140,7 +140,7 @@ function CompleteMessage(props){
   return (
     <div className={styles['container']}>
       <ul className={styles['first']}>
-        <li className={styles['item']} onClick={(e)=>{e.stopPropagation();changeHeader();}}><span>头像</span><Arrow className={styles.arrow}/></li>
+        <li className={styles['item']} onClick={(e)=>{e.stopPropagation();changeHeader();}}><span>头像</span><Arrow className={styles.arrow} onAction={()=>{changeHeader();}}/></li>
       </ul>
       {
         role == 'teacher' ? 

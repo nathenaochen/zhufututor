@@ -1,16 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactDom from 'react-dom';
 import cns from 'classnames';
 import Hoc from 'components/Hoc';
 import Arrow from 'components/Arrow';
 import styles from './me.less';
+import Loading from 'components/Loading';
 import advice from './images/advice_feekback.png';
 import password from './images/edit_password.png';
 import jssdkImg from './images/jssdk_test.png';
 import personInfo from './images/person_info_edit.png';
 import setting from './images/setting.png';
 import tel from './images/tel.png';
-import {pageInit, storage} from 'utils/tool';
+import {checkIsApp, pageInit, storage} from 'utils/tool';
+import {getStudentDetail, getTeacherDetail} from 'apiService/service';
+import {getStudentLisRes,Result,getTeacherLisRes} from 'interface/response';
 import headerImg from './images/6.png';
 
 let items = [
@@ -76,13 +79,63 @@ let items = [
 
 function Me(){
 
+  const msgObj = useRef<any>({});
 
+  //记录用户信息
+  const [userMsg, setUserMsg] = useState<getStudentLisRes|getTeacherLisRes>();
+
+  //登录状态判断
+  async function checkLoginStatus(){
+     //判断角色以及是否登录
+     let loginStatus;
+     const isApp = await checkIsApp();
+     msgObj.current.isApp = isApp;
+     console.log('me',loginStatus,isApp);
+     //检查是否有登录态
+     if(isApp){
+       loginStatus = await JSSDK.getFileData({key:['role']});
+       console.log('me',loginStatus);
+       msgObj.current.loginStatus = loginStatus.role;
+     }else{
+       loginStatus = storage.get(['role']);
+       msgObj.current.loginStatus = loginStatus.role;
+     }
+     return loginStatus;
+  }
+
+
+  async function init(){
+    const {role} = await checkLoginStatus();
+    console.log(role,'yyy');
+    const {token} =  msgObj.current.isApp ? await JSSDK.getFileData({key:['token']}) : storage.get(['token']);
+    // console.log(token,'yyy');
+    if(role == 'student'){
+      const {result} = await getStudentDetail({key: msgObj.current.isApp ? token : storage.get(['token']).token});
+      console.log('获取到的学生信息',result);
+      setUserMsg(result as any)
+
+    }else if(role == 'teacher'){
+      const {result} = await getTeacherDetail({key: msgObj.current.isApp ? token : storage.get(['token']).token});
+      console.log('获取到的老师信息',result);
+      setUserMsg(result as any);
+    }else{
+      setUserMsg({} as any)
+    }
+
+
+  }
 
   useEffect(()=>{
     JSSDK.onappear({cb:()=>{
       console.log('me---onappear');
+      init();
     }})
+    init();
   },[]);
+
+  if(!userMsg){
+    return <Loading />
+  }
 
 
   return (
@@ -90,13 +143,13 @@ function Me(){
       <div className={styles['content']}>
         <div className={styles['header']}>
           <div className={styles['header-img']}>
-              <img src={headerImg} alt=""/>
+                <img src={userMsg.header_img + '?t=' + new Date().getTime() || ' '} alt="" onError={(e:any)=>{e.target.onError = null;e.target.src=headerImg}}/>
           </div>
           <div className={styles['info']}>
-            <p className={styles['name']}>NathenAoChen</p>
+            {(userMsg && userMsg.name) ? <p className={styles['name']}>{userMsg.name}</p> : <p className={styles['name']} onClick={(e)=>{e.stopPropagation();pageInit({url:'login-page.html'})}}>马上登陆</p>}
             <div className={styles['zuo-box']}>
-              <p className={styles['qianming']}>座右铭:仰望星空，脚踏实地</p>
-              <Arrow className={styles.arrow}/>
+            {(userMsg && userMsg.zuoyouming) ? <p className={styles['qianming']}>{userMsg.zuoyouming}</p> : <p className={styles['qianming']}>你还没有设定签名哦！</p>}
+              <Arrow className={styles.arrow} onAction={()=>{pageInit({url:'complete-message.html'})}}/>
             </div>
           </div>
         </div>

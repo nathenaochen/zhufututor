@@ -4,12 +4,13 @@ import cns from 'classnames';
 
 interface ArrowProps {
   className?: string;
+  onAction?: Function;
 }
 
 function Arrow(props: ArrowProps){
-  const {className} = props;
+  const {className,onAction} = props;
   return (
-    <span className={cns(styles.arrow,className)}>
+    <span className={cns(styles.arrow,className)} onClick={(e)=>{e.stopPropagation(); onAction && onAction(); }}>
       
     </span>
   )

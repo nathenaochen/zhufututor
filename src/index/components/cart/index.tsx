@@ -21,11 +21,12 @@ export default function Cart(props:CardProps){
   useEffect(()=>{
   },[]);
 
+
   return (
     <div className={styles.cart} onClick={(e:React.MouseEvent)=>{e.stopPropagation();gotoDetail(teacher.key);}}> 
       <div className={styles['left']}>
         <div className={styles.image}>
-          <img src={teacher.header_img || '' } alt="" onError={(e:any)=>{e.target.onError = null; e.target.src=headerImg}}/>  
+          <img src={teacher.header_img + '?t=' + new Date().getTime() || '' } alt="" onError={(e:any)=>{e.target.onError = null; e.target.src=headerImg}}/>  
         </div>
         {teacher.teacher_level && <p className={styles.level}>{teacher.teacher_level}</p>}
       </div>

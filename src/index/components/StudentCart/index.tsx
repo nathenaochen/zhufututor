@@ -3,6 +3,7 @@ import cns from 'classnames'
 import styles from './sc.less';
 import {pageInit} from 'utils/tool';
 import {getStudentLisRes} from 'interface/response';
+import headerImg from './images/1.jpg';
 
 interface StudentCardProps {
   student: getStudentLisRes;
@@ -21,7 +22,7 @@ function StudentCart(props:StudentCardProps){
     <div className={styles['student-cart']} onClick={(e:React.MouseEvent)=>{e.stopPropagation();gotoDetail(student.key);}}>
       <div className={styles['left']}>
         <div className={styles.image}>
-            <img src={student.header_img} alt=""/>  
+            <img src={student.header_img + '?t=' + new Date().getTime()|| ''} alt="" onError={(e:any)=>{e.target.onError = null; e.target.src=headerImg}}/>  
           </div>
       </div>
       <div className={styles['right']}>

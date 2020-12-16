@@ -9,6 +9,7 @@ import io from 'socket.io-client';
 import {storage,getUrlQuery,checkIsApp,timeFromat} from 'utils/tool';
 import styles from './msg.less';
 import {getRecentList} from 'apiService/service';
+import headerImg from './images/1.jpg';
 
 interface itemData {
   name: string;
@@ -117,9 +118,12 @@ function MessageList(){
       //创建websocket对象
       let socket = io.connect(EVN == 'development'?'http://39.99.174.23:3001/chat':'http://39.99.174.23:3001/chat',{query:{sender:sender.current,typeCon:'list'}});
       socK.current = socket;
-      socket.on('connect', function () {
-        console.log('链接成功');
-      });
+        socket.on('connect', function () {
+          console.log('链接成功');
+        });
+        socket.on('disconnect', function(){
+          console.log('soket连接断开');
+        })
       // 监听newmsg事件,新消息提醒
       socket.on('newmsg', (data:any) => {
         console.log(data);
@@ -148,14 +152,47 @@ function MessageList(){
 
   //更新id
   async function updataId(cb){
-    const isApp = await checkIsApp();
-    if(isApp){
-      sender.current = await JSSDK.getFileData({key:['token']});
-      sender.current = sender.current.token;
-      console.log(sender.current,'sender.current');
-    }else{
-      sender.current = storage.get(['token']).token;
-    }
+    const {token} = await JSSDK.getFileData({key:['token']});
+    console.log(sender.current,token,token != sender.current,'sender.current -- onappear');
+    sender.current = token;
+    //如果切换了账号，先断开之前的socket连接，并根据新的信息建立账号从新建立socket连接
+    // if(token != sender.current){
+      
+
+    //   try{
+    //     //创建websocket对象
+    //     socK.current.emit('disconnect',{query:{sender:token,typeCon:'list'}});
+    //     let socket = io.connect(EVN == 'development'?'http://39.99.174.23:3001/chat':'http://39.99.174.23:3001/chat',{query:{sender:token,typeCon:'list'}});
+    //     socK.current = socket;
+    //     socket.on('connect', function () {
+    //       console.log('链接成功');
+    //     });
+    //     socket.on('disconnect', function(){
+    //       console.log('soket连接断开');
+    //     })
+    //     // 监听newmsg事件,新消息提醒
+    //     socket.on('newmsg', (data:any) => {
+    //       console.log(data);
+    //       setRecentlyFriend((oldList:any)=>{
+    //         let idx = oldList.findIndex((item:any)=>{return item.receiver == data.receiver});
+    //         if(idx != -1){
+    //           oldList[idx].nestMsg = data.nestMsg;
+    //           oldList[idx].noreadNumber = data.noreadNumber;
+    //           oldList[idx].date = data.date;
+    //           oldList.sort((a,b)=>{
+    //             return b.date - a.date
+    //           });
+    //           return [...oldList];
+    //         }else{
+    //           return [data,...oldList]
+    //         }
+          
+    //       });
+    //     });
+    //   }catch(err){
+    //     console.log('连接socket报错',err);
+    //   }
+    // }
     if(sender.current != null){
       cb()
     }else{
@@ -208,7 +245,9 @@ function MessageList(){
                 <li onClick={(evt: React.MouseEvent)=>{evt.stopPropagation();gotoDetail(item.receiver,item.name);}} key={item.sender}>
                   <div className={styles['msg']}>
                     <div className={styles['left']}>
-                      <img src={`http://39.99.174.23/zhifututor/common/images/${item.receiver}.png`} alt=""/>
+                      <img src={`http://39.99.174.23/zhifututor/common/images/${item.receiver}.png?t=${new Date().getTime()}`} alt=""
+                        onError={(e:any)=>{e.target.onError = null;e.target.src=headerImg}}
+                      />
                     </div>
                     <div className={styles['right']}>
                       <p className={styles['name']}>{item.name}</p>
