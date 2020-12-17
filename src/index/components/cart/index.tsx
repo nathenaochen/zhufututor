@@ -44,7 +44,7 @@ export default function Cart(props:CardProps){
           <p>
             <span className={styles['school']}>{teacher.school_tag}</span>
             <span className={styles['quali']}>{teacher.degree}</span>
-            <span className={styles['has-teach']}>授课<span>{teacher.teaching_time}</span>课时</span>
+            {/* <span className={styles['has-teach']}>授课<span>{teacher.teaching_time}</span>课时</span> */}
           </p>
           <span className={styles['money']}>￥{teacher.charge}元/小时</span>
         </div>

@@ -52,8 +52,9 @@ function TeacherDetail(){
         <div className={styles.baseInfo}>
           <h3>基本信息</h3>
           <div>
-            <p className={styles.baseInfo_title}>教育背景</p>
-          <p className={styles.baseInfo_detail}>{`${teacherDetail.school_tag} ${teacherDetail.degree}`}</p>
+            <p className={styles.baseInfo_title}>家教经验</p>
+          {/* <p className={styles.baseInfo_detail}>{`${teacherDetail.school_tag} ${teacherDetail.degree}`}</p> */}
+          <p className={styles.baseInfo_detail}>{`累计授课${teacherDetail.teaching_time}课时`}</p>
           </div>
           <div>
             <p className={styles.baseInfo_title}>教授课程</p>

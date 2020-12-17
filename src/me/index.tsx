@@ -149,7 +149,23 @@ function Me(){
             {(userMsg && userMsg.name) ? <p className={styles['name']}>{userMsg.name}</p> : <p className={styles['name']} onClick={(e)=>{e.stopPropagation();pageInit({url:'login-page.html'})}}>马上登陆</p>}
             <div className={styles['zuo-box']}>
             {(userMsg && userMsg.zuoyouming) ? <p className={styles['qianming']}>{userMsg.zuoyouming}</p> : <p className={styles['qianming']}>你还没有设定签名哦！</p>}
-              <Arrow className={styles.arrow} onAction={()=>{pageInit({url:'complete-message.html'})}}/>
+              <Arrow className={styles.arrow} onAction={async()=>{
+                let loginStatus;
+                if(isApp){
+                  loginStatus = await JSSDK.getFileData({key:['role']});
+                }else{
+                  loginStatus = storage.get(['role']);
+                }
+                if(loginStatus.role != null){
+                  if(loginStatus.role == 'student'){
+                    pageInit({url:'complete-message.html?type=student'})
+                  }else if(loginStatus.role == 'teacher'){
+                    pageInit({url:'complete-message.html?type=teacher'})
+                  }
+                }else{
+                  pageInit({url:'login-page.html'})
+                }
+              }}/>
             </div>
           </div>
         </div>

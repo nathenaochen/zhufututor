@@ -40,7 +40,7 @@ function Index(){
         const {code, result} = await getTeacherList({});
         console.log(result,'查询教师列表页结果');
         if(+code == 0){
-          setTeacherList(result);
+          setTeacherList(result.slice(0,6));
         }else{
           setTeacherList([]);
         }
@@ -49,7 +49,7 @@ function Index(){
         const {code, result} = await getStudentList({});
         console.log('学生列表',result);
         if(+code == 0){
-          setStudentList(result);
+          setStudentList(result.slice(0,7));
         }else{
           setStudentList([]);
         }

@@ -11,7 +11,7 @@ function Setting(){
 
   return (
     <div className={styles['container']}>
-      <div  onClick={(e:React.MouseEvent) => {e.stopPropagation(); JSSDK.writeData({token:'',role:''});}}>退出登录</div>
+      <div  onClick={(e:React.MouseEvent) => {e.stopPropagation(); JSSDK.writeData({token:'',role:''});JSSDK.close({});}}>退出登录</div>
       {/* <div className="App">
       <div id="container1" onClickCapture={() => console.log('捕获经过 div')} onClick={() => console.log('冒泡经过 div')} className="container">
         <p style={{ width: 128, textAlign: 'center' }}>

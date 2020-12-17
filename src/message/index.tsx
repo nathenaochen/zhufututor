@@ -245,7 +245,7 @@ function MessageList(){
                 <li onClick={(evt: React.MouseEvent)=>{evt.stopPropagation();gotoDetail(item.receiver,item.name);}} key={item.sender}>
                   <div className={styles['msg']}>
                     <div className={styles['left']}>
-                      <img src={`http://39.99.174.23/zhifututor/common/images/${item.receiver}.png?t=${new Date().getTime()}`} alt=""
+                      <img src={`http://39.99.174.23/zhifututor/common/images/${item.receiver}.png`} alt=""
                         onError={(e:any)=>{e.target.onError = null;e.target.src=headerImg}}
                       />
                     </div>
