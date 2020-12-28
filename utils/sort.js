@@ -456,12 +456,20 @@ var value = 1;
 var foo = {
   value: 2,
   bar: function () {
+    var value = 3;
     return this.value;
   }
 }
 
-console.log(foo.bar());
-console.log((foo.bar)());
-console.log((foo.bar = foo.bar)());
-console.log((false || foo.bar)());
-console.log((foo.bar, foo.bar)());
+// 说一说我的理解吧，四个输出结果中，前两个是一样的，第二个输出语句中给表达式加了括号，
+// 而括号的作用是改变表达式的运算顺序，而在这里加与不加括号并无影响；第三,第四个和第五个其实道理是一样的，
+//  涉及三个运算符号，即“=”（赋值运算符），“||”（或运算符）和“,”（叫什么运算符忘了）。“=”运算符的返回值是等号右边的表达式，
+//  “，”运算符的返回值是最后面一个。
+//  那为什么最后this.a指向的是全局的10呢？我的理解是这两个运算符的返回值仅仅是一个函数bar，并不包括foo对象，
+//  这样this就是指向全局的window，所以a的值是10。
+
+console.log(foo.bar());//2
+console.log((foo.bar)());//2
+console.log((foo.bar = foo.bar)()); //1 同下
+console.log((false || foo.bar)()); //1 (false || foo.bar）的返回值是foo.bar这个函数体，然后一个函数单独执行，相当于fn()这么直接调用，并不是通过foo.bar来调用
+console.log((foo.bar, foo.bar)());//1 同上
