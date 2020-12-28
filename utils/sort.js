@@ -255,6 +255,7 @@
 //   }
 //   context.self = this;
 //   var res = eval('context.self('+argu+')');
+//   // var res = context.self(argu.join(','));
 //   delete context.self;
 //   return res;
 // }
@@ -263,6 +264,7 @@
 //   console.log(this.a);
 //   console.log(a);
 //   console.log(b);
+//   console.log(c);
 //   return 9999;
 // }
 // console.log(fn.call_1(obj,1,2,3));
@@ -373,11 +375,94 @@
 // Array.from = undefined;
 
 
-if(!Array.from){
-  Array.from = function(arraylike){
-    return Array.prototype.slice.call(arraylike);
+// if(!Array.from){
+//   Array.from = function(arraylike){
+//     return Array.prototype.slice.call(arraylike);
+//   }
+// }
+
+// var arrayLike = {0: 'name', 1: 'age', 2: 'sex', length: 3 }
+// console.log(Array.from(arrayLike));
+
+// const list = [1, 2, 3]
+// const square = num => {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       resolve(num * num)
+//     }, 1000)
+//   })
+// }
+
+// async function test() {
+//   // list.forEach(async x=> {
+//     // const res = await square(x)
+//     // console.log(res)
+//   // })
+//   for(var i = 0; i < list.length; i++){
+//     const res = await square(list[i])
+//     console.log(res)
+//   }
+// }
+// test()
+
+// Promise.resty = function(fn,times){
+//   let count = 1;
+//   return new Promise(async (res,rej)=>{
+//     while(count <= times){
+//       try{
+//         const result = await fn();
+//         res(result);
+//         break;
+//       }catch(err){
+//         console.log('开始第'+ count +'重试');
+//         count = count + 1;
+//         if(count > times){rej('报错')}
+//       }
+//     }
+//   })
+// }
+
+// function getProm() {
+//   const n = Math.random();
+//   return new Promise((resolve, reject) => {
+//       setTimeout(() =>  n > 0.5 ? resolve(n) : reject(n), 1000);
+//   });
+// }
+
+// Promise.resty(getProm,3).then((res)=>{
+//   console.log('111',res);
+// }).catch((e)=>{
+//   console.log('222',e);
+// });
+
+// Promise.resty(getProm,3).then((res)=>{
+//   console.log('111',res);
+// },(e)=>{
+//   console.log('222',e);
+// });
+
+// if(!('a' in window)){
+//   var a = 1;
+// }
+// console.log(a);
+
+// console.log(a);
+// var a = 1;
+// var b = function a(){}
+// console.log(a);
+
+var value = 1;
+
+var foo = {
+  value: 2,
+  bar: function () {
+    return this.value;
   }
 }
 
-var arrayLike = {0: 'name', 1: 'age', 2: 'sex', length: 3 }
-console.log(Array.from(arrayLike));
+
+console.log(foo.bar());
+console.log((foo.bar)());
+console.log((foo.bar = foo.bar)());
+console.log((false || foo.bar)());
+console.log((foo.bar, foo.bar)());
