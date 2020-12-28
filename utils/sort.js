@@ -460,7 +460,6 @@ var foo = {
   }
 }
 
-
 console.log(foo.bar());
 console.log((foo.bar)());
 console.log((foo.bar = foo.bar)());
