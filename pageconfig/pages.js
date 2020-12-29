@@ -46,6 +46,10 @@ const pages = [
       'pageName': 'complete-message'
     },
     {
+      'title':'test',
+      'pageName': 'test'
+    },
+    {
       'title':'Jssdk Test',
       'pageName': 'webviewtest'
     }
