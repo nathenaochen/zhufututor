@@ -255,6 +255,7 @@
 //   }
 //   context.self = this;
 //   var res = eval('context.self('+argu+')');
+//   // var res = context.self(argu.join(','));
 //   delete context.self;
 //   return res;
 // }
@@ -263,6 +264,7 @@
 //   console.log(this.a);
 //   console.log(a);
 //   console.log(b);
+//   console.log(c);
 //   return 9999;
 // }
 // console.log(fn.call_1(obj,1,2,3));
@@ -373,11 +375,101 @@
 // Array.from = undefined;
 
 
-if(!Array.from){
-  Array.from = function(arraylike){
-    return Array.prototype.slice.call(arraylike);
+// if(!Array.from){
+//   Array.from = function(arraylike){
+//     return Array.prototype.slice.call(arraylike);
+//   }
+// }
+
+// var arrayLike = {0: 'name', 1: 'age', 2: 'sex', length: 3 }
+// console.log(Array.from(arrayLike));
+
+// const list = [1, 2, 3]
+// const square = num => {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       resolve(num * num)
+//     }, 1000)
+//   })
+// }
+
+// async function test() {
+//   // list.forEach(async x=> {
+//     // const res = await square(x)
+//     // console.log(res)
+//   // })
+//   for(var i = 0; i < list.length; i++){
+//     const res = await square(list[i])
+//     console.log(res)
+//   }
+// }
+// test()
+
+// Promise.resty = function(fn,times){
+//   let count = 1;
+//   return new Promise(async (res,rej)=>{
+//     while(count <= times){
+//       try{
+//         const result = await fn();
+//         res(result);
+//         break;
+//       }catch(err){
+//         console.log('开始第'+ count +'重试');
+//         count = count + 1;
+//         if(count > times){rej('报错')}
+//       }
+//     }
+//   })
+// }
+
+// function getProm() {
+//   const n = Math.random();
+//   return new Promise((resolve, reject) => {
+//       setTimeout(() =>  n > 0.5 ? resolve(n) : reject(n), 1000);
+//   });
+// }
+
+// Promise.resty(getProm,3).then((res)=>{
+//   console.log('111',res);
+// }).catch((e)=>{
+//   console.log('222',e);
+// });
+
+// Promise.resty(getProm,3).then((res)=>{
+//   console.log('111',res);
+// },(e)=>{
+//   console.log('222',e);
+// });
+
+// if(!('a' in window)){
+//   var a = 1;
+// }
+// console.log(a);
+
+// console.log(a);
+// var a = 1;
+// var b = function a(){}
+// console.log(a);
+
+var value = 1;
+
+var foo = {
+  value: 2,
+  bar: function () {
+    var value = 3;
+    return this.value;
   }
 }
 
-var arrayLike = {0: 'name', 1: 'age', 2: 'sex', length: 3 }
-console.log(Array.from(arrayLike));
+// 说一说我的理解吧，四个输出结果中，前两个是一样的，第二个输出语句中给表达式加了括号，
+// 而括号的作用是改变表达式的运算顺序，而在这里加与不加括号并无影响；第三,第四个和第五个其实道理是一样的，
+//  涉及三个运算符号，即“=”（赋值运算符），“||”（或运算符）和“,”（叫什么运算符忘了）。“=”运算符的返回值是等号右边的表达式，
+//  “，”运算符的返回值是最后面一个。
+//  那为什么最后this.a指向的是全局的10呢？我的理解是这两个运算符的返回值仅仅是一个函数bar，并不包括foo对象，
+//  这样this就是指向全局的window，所以a的值是10。
+
+console.log(foo.bar());//2
+console.log((foo.bar)());//2
+console.log((foo.bar = foo.bar)()); //1 同下
+console.log((false || foo.bar)()); //1 (false || foo.bar）的返回值是foo.bar这个函数体，然后一个函数单独执行，相当于fn()这么直接调用，并不是通过foo.bar来调用
+console.log((foo.bar, foo.bar)());//1 同上
