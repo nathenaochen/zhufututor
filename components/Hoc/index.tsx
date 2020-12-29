@@ -12,6 +12,8 @@ interface globalData {
 function Hoc(WrapComponent:FunctionComponent<globalData>){
   return () => {
 
+    const [acd ,setAcd] = useState(1)
+
 
     async function init(){ 
       let globEvent = new myEventEmitter();
@@ -19,6 +21,7 @@ function Hoc(WrapComponent:FunctionComponent<globalData>){
       let isApp = await checkIsApp();
       console.log('isapp--hoc',isApp);
       window.isApp = isApp;
+      setTimeout(()=>{setAcd(2)},2000);
     }
 
     useEffect(()=>{
@@ -27,7 +30,7 @@ function Hoc(WrapComponent:FunctionComponent<globalData>){
 
     new Vconsole();
     return (
-      <WrapComponent a={1} b={'23'}/>
+      <WrapComponent a={acd} b={'23'}/>
     )
   }
 }
