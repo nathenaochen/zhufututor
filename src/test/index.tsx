@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from "react";
+import React,{useState, useEffect, useRef} from "react";
 import ReactDOM from "react-dom";
 
 
@@ -282,36 +282,123 @@ import ReactDOM from "react-dom";
 /**
  * 测试自定义hook
  */
-function LifeCycleContainer(){
-  
-  const [state, setState] = useState(true);
-  const isOnline = useFriendState(state);
+// function LifeCycleContainer(){
+//   console.log('父组件开始');
+//   const [state, setState] = useState(true);
+//   // const isOnline = useFriendState(state);
+
+//   useEffect(()=>{
+//     console.log('父组件useeffect');
+//   })
+
+//   console.log('父组件retuen前');
+//   return (
+//     <div>
+//       {/* {isOnline} */}
+//       <Child />
+//       {state ? 'hahah' : 'lalal'}
+//       <div onClick={()=>{
+//         setState(!state);
+//         }}>anniu </div>
+//     </div>
+//   )
+
+// }
+//自定义hook 实现状态逻辑复用
+// function useFriendState(state){
+//   console.log('自定义useFriendState开始');
+//   const [isOnline, setIsOnline] = useState(1);
+
+//   useEffect(()=>{
+//     console.log('自定义useFriendState的useeffect');
+//     // setIsOnline((a)=>{return ++a});
+//   },[state]);
+
+//   console.log('自定义useFriendState retutn前');
+
+//   return isOnline;
+
+//   // return [isOnline,setIsOnline]
+// }
+
+// function Child(){
+//   console.log('子组件开始');
+
+//   useEffect(()=>{
+//     console.log('子组件useeffect');
+//   })
+
+
+//   console.log('子组件return前');
+//   return (
+//     <div>子组件</div>
+//   )
+// }
+
+
+/**
+ * 测试在hook中获取上一次的state和props
+ */
+// function Counter() {
+//   const [count, setCount] = useState(0);
+//   const prevCount = useLastState(count);
+
+//   // const prevCountRef = useRef<any>();
+//   console.log(count);
+//   // useEffect(() => {
+//   //   prevCountRef.current = count;
+//   //   // console.log(prevCountRef.current);
+//   // });
+//   // const prevCount = prevCountRef.current;
+//   // console.log(prevCount);
+//   return (
+//     <div>
+//        <h1>Now: {count}, before: {prevCount}</h1>
+//        <div onClick={()=>{setCount((a)=>{return ++a})}}>按钮自</div>
+//     </div>
+//   );
+// }
+
+// function useLastState(state){
+
+//   const lastState = useRef();
+
+//   useEffect(()=>{
+//     lastState.current = state;
+//   },[state])
+
+//   return lastState.current;
+// }
+
+
+function Example() {
+  const [count, setCount] = useState(0);
+
+  const prevCountRef = useRef<any>(12);
+
+  function handleAlertClick() {
+    setCount(6)
+    setTimeout(() => {
+      console.log('You clicked on: ' + count);
+    }, 3000);
+    // console.log('You clicked on: ' + count);
+  }
 
   return (
     <div>
-      {isOnline}
-      {state ? 'hahah' : 'lalal'}
-      <div onClick={()=>{
-        setState(!state);
-        }}>anniu </div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+      <button onClick={handleAlertClick}>
+        Show alert
+      </button>
     </div>
-  )
-
+  );
 }
 
-//自定义hook 实现状态逻辑复用
-function useFriendState(state){
-  console.log('自定义useFriendState');
-  const [isOnline, setIsOnline] = useState(1);
+Example.a = 1;
 
-  useEffect(()=>{
-    console.log('自定义useFriendState的useeffect');
-    // setIsOnline((a)=>{return ++a});
-  },[state]);
+console.log(Example);
 
-  return isOnline;
-
-  // return [isOnline,setIsOnline]
-}
-
-ReactDOM.render(<LifeCycleContainer />, document.getElementById("root"));
+ReactDOM.render(<Example />, document.getElementById("root"));

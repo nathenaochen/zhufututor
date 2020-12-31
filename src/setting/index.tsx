@@ -5,9 +5,10 @@ import Hoc from 'components/Hoc';
 import styles from './setting.less';
 
 function Setting(props){
+  console.log('steeing begin');
   const {a} = props;
 
-  const [state, setState] = useState<any>({});
+  const [state, setState] = useState<any>({b:2});
   const [count, setCount] = useState<any>({})
 
   useEffect(()=>{
@@ -17,11 +18,11 @@ function Setting(props){
     }
   },[state,a]);
 
-
+  console.log('steeing return');
   return (
     <div className={styles['container']}>
       <div  onClick={(e:React.MouseEvent) => {e.stopPropagation(); JSSDK.writeData({token:'',role:''});JSSDK.close({});console.log(state);}}>退出登录</div>
-      <button style={{ width: 128 }} onClick={(e:React.MouseEvent) => { e.stopPropagation();console.log('mubiao' );setState((state)=>{state.a=1;return {a:1}});}}>点击+1</button>
+      <button style={{ width: 128 }} onClick={(e:React.MouseEvent) => { e.stopPropagation();console.log('mubiao' );setState((state)=>{return {a:1}});}}>点击+1</button>
       {/* <div className="App">
       <div id="container1" onClickCapture={() => console.log('捕获经过 div')} onClick={() => console.log('冒泡经过 div')} className="container">
         <p style={{ width: 128, textAlign: 'center' }}>

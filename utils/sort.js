@@ -451,25 +451,163 @@
 // var b = function a(){}
 // console.log(a);
 
-var value = 1;
-
-var foo = {
-  value: 2,
-  bar: function () {
-    var value = 3;
-    return this.value;
-  }
-}
-
+/**
+ * 考察this
+ */
+// var value = 1;
+// var foo = {
+//   value: 2,
+//   bar: function () {
+//     var value = 3;
+//     return this.value;
+//   }
+// }
 // 说一说我的理解吧，四个输出结果中，前两个是一样的，第二个输出语句中给表达式加了括号，
 // 而括号的作用是改变表达式的运算顺序，而在这里加与不加括号并无影响；第三,第四个和第五个其实道理是一样的，
 //  涉及三个运算符号，即“=”（赋值运算符），“||”（或运算符）和“,”（叫什么运算符忘了）。“=”运算符的返回值是等号右边的表达式，
 //  “，”运算符的返回值是最后面一个。
 //  那为什么最后this.a指向的是全局的10呢？我的理解是这两个运算符的返回值仅仅是一个函数bar，并不包括foo对象，
 //  这样this就是指向全局的window，所以a的值是10。
+// console.log(foo.bar());//2
+// console.log((foo.bar)());//2
+// console.log((foo.bar = foo.bar)()); //1 同下
+// console.log((false || foo.bar)()); //1 (false || foo.bar）的返回值是foo.bar这个函数体，然后一个函数单独执行，相当于fn()这么直接调用，并不是通过foo.bar来调用
+// console.log((foo.bar, foo.bar)());//1 同上
 
-console.log(foo.bar());//2
-console.log((foo.bar)());//2
-console.log((foo.bar = foo.bar)()); //1 同下
-console.log((false || foo.bar)()); //1 (false || foo.bar）的返回值是foo.bar这个函数体，然后一个函数单独执行，相当于fn()这么直接调用，并不是通过foo.bar来调用
-console.log((foo.bar, foo.bar)());//1 同上
+/**
+ * 用setTimeout实现setInterval 和 clearInterval
+ */
+// function _setInterVal(fn,time){
+//   let id = {};
+//   function setFn(){
+//     id.target && clearTimeout(id.target);
+//     fn();
+//     id.tartget = setTimeout(setFn,time);
+//   }
+//   id.target = setTimeout(setFn,time);
+//   return id;
+// }
+// let returnId = _setInterVal(()=>{console.log('111')},1000);
+
+// function _clearInterval(id){
+//   clearTimeout(id);
+// }
+
+// setTimeout(()=>{_clearInterval(returnId.tartget)},10100);
+
+/**
+ * 用链表来实现队列
+ */
+// class Node {
+//   constructor(value){
+//     this.value = value;
+//     this.next = null;
+//   }
+// }
+
+// class QueueBasedOnLinkedList {
+//   constructor(){
+//     this.head = null;
+//     this.tail = null;
+//   }
+
+//   enqueue(value){
+//     if(this.head == null){
+//       let node = new Node(value);
+//       this.head = node;
+//       this.tail = this.head;
+//       return value;
+//     }else{
+//       let node = new Node(value);
+//       this.tail.next = node;
+//       this.tail = this.tail.next;
+//       return value
+//     }
+//   }
+
+//   dequeue(){
+//     if(this.head == null){
+//       return -1;
+//     }
+//     let value = this.head.value;
+//     this.head = this.head.next;
+//     return value;
+//   }
+// }
+
+// // Test
+// const newQueue = new QueueBasedOnLinkedList()
+// // 插入元素
+// newQueue.enqueue(1)
+// newQueue.enqueue(2)
+// newQueue.enqueue(3)
+// // 获取元素
+// let res = 0
+// console.log('-------获取dequeue元素------',(3+1)%8)
+// while (res !== -1) {
+//     res = newQueue.dequeue()
+//     console.log(res)
+// }
+
+/**
+ * 用数组实现循环队列  队空判断条件为 this.head == this.tail  队满判断条件为 (this.tail + 1) % (this.len) == this.head
+ */
+class LoopArray {
+  constructor(len){
+    this.len = len;  //循环队列长度
+    this.items = new Array(len);  //循环队列
+    this.head = 0;//队首
+    this.tail = 0;//队尾
+  }
+
+  enqueue(value){
+    // console.log(this.tail,'111');
+    if(((this.tail + 1) % (this.len)) == this.head){
+      return false;
+    }
+    this.items[this.tail] = value;
+    this.tail = (this.tail + 1) % (this.len);
+    // console.log(this.tail);
+    return true;
+
+  }
+
+  dequeue(){
+    // console.log(this.items);
+    if(this.head == this.tail){return -1}
+    const value = this.items[this.head];
+    this.head = (this.head + 1) % (this.len );
+    return value;
+  }
+}
+
+// Test
+const newQueue = new LoopArray(5)
+// 插入元素
+newQueue.enqueue(1)
+newQueue.enqueue(2)
+newQueue.enqueue(3)
+newQueue.enqueue(4)
+newQueue.enqueue(5)
+console.log('-------获取dequeue元素------',newQueue)
+newQueue.dequeue()
+newQueue.dequeue()
+newQueue.dequeue()
+console.log('-------获取dequeue元素------',newQueue)
+newQueue.enqueue(6)
+newQueue.enqueue(7)
+newQueue.enqueue(8)
+newQueue.enqueue(9)
+console.log('-------获取dequeue元素------',newQueue)
+console.log(newQueue.dequeue());
+
+newQueue.enqueue(9)
+console.log('-------获取dequeue元素------',newQueue)
+// newQueue.enqueue(6)
+// 获取元素
+// let res = 0
+// console.log('-------获取dequeue元素------',newQueue)
+// while (res !== -1) {
+//     res = newQueue.dequeue()
+//     console.log(res)
+// }
