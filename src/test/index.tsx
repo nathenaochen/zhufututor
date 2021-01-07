@@ -371,34 +371,34 @@ import ReactDOM from "react-dom";
 // }
 
 
-function Example() {
-  const [count, setCount] = useState(0);
+// function Example() {
+//   const [count, setCount] = useState(0);
 
-  const prevCountRef = useRef<any>(12);
+//   const prevCountRef = useRef<any>(12);
 
-  function handleAlertClick() {
-    setCount(6)
-    setTimeout(() => {
-      console.log('You clicked on: ' + count);
-    }, 3000);
-    // console.log('You clicked on: ' + count);
-  }
+//   function handleAlertClick() {
+//     setCount(6)
+//     setTimeout(() => {
+//       console.log('You clicked on: ' + count);
+//     }, 3000);
+//     // console.log('You clicked on: ' + count);
+//   }
 
-  return (
-    <div>
-      <p>You clicked {count} times</p>
-      <button onClick={() => setCount(count + 1)}>
-        Click me
-      </button>
-      <button onClick={handleAlertClick}>
-        Show alert
-      </button>
-    </div>
-  );
-}
+//   return (
+//     <div>
+//       <p>You clicked {count} times</p>
+//       <button onClick={() => setCount(count + 1)}>
+//         Click me
+//       </button>
+//       <button onClick={handleAlertClick}>
+//         Show alert
+//       </button>
+//     </div>
+//   );
+// }
 
-Example.a = 1;
+// Example.a = 1;
 
-console.log(Example);
+// console.log(Example);
 
 ReactDOM.render(<Example />, document.getElementById("root"));

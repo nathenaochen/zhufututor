@@ -552,57 +552,57 @@
 /**
  * 用数组实现循环队列  队空判断条件为 this.head == this.tail  队满判断条件为 (this.tail + 1) % (this.len) == this.head
  */
-class LoopArray {
-  constructor(len){
-    this.len = len;  //循环队列长度
-    this.items = new Array(len);  //循环队列
-    this.head = 0;//队首
-    this.tail = 0;//队尾
-  }
+// class LoopArray {
+//   constructor(len){
+//     this.len = len;  //循环队列长度
+//     this.items = new Array(len);  //循环队列
+//     this.head = 0;//队首
+//     this.tail = 0;//队尾
+//   }
 
-  enqueue(value){
-    // console.log(this.tail,'111');
-    if(((this.tail + 1) % (this.len)) == this.head){
-      return false;
-    }
-    this.items[this.tail] = value;
-    this.tail = (this.tail + 1) % (this.len);
-    // console.log(this.tail);
-    return true;
+//   enqueue(value){
+//     // console.log(this.tail,'111');
+//     if(((this.tail + 1) % (this.len)) == this.head){
+//       return false;
+//     }
+//     this.items[this.tail] = value;
+//     this.tail = (this.tail + 1) % (this.len);
+//     // console.log(this.tail);
+//     return true;
 
-  }
+//   }
 
-  dequeue(){
-    // console.log(this.items);
-    if(this.head == this.tail){return -1}
-    const value = this.items[this.head];
-    this.head = (this.head + 1) % (this.len );
-    return value;
-  }
-}
+//   dequeue(){
+//     // console.log(this.items);
+//     if(this.head == this.tail){return -1}
+//     const value = this.items[this.head];
+//     this.head = (this.head + 1) % (this.len );
+//     return value;
+//   }
+// }
 
-// Test
-const newQueue = new LoopArray(5)
-// 插入元素
-newQueue.enqueue(1)
-newQueue.enqueue(2)
-newQueue.enqueue(3)
-newQueue.enqueue(4)
-newQueue.enqueue(5)
-console.log('-------获取dequeue元素------',newQueue)
-newQueue.dequeue()
-newQueue.dequeue()
-newQueue.dequeue()
-console.log('-------获取dequeue元素------',newQueue)
-newQueue.enqueue(6)
-newQueue.enqueue(7)
-newQueue.enqueue(8)
-newQueue.enqueue(9)
-console.log('-------获取dequeue元素------',newQueue)
-console.log(newQueue.dequeue());
+// // Test
+// const newQueue = new LoopArray(5)
+// // 插入元素
+// newQueue.enqueue(1)
+// newQueue.enqueue(2)
+// newQueue.enqueue(3)
+// newQueue.enqueue(4)
+// newQueue.enqueue(5)
+// console.log('-------获取dequeue元素------',newQueue)
+// newQueue.dequeue()
+// newQueue.dequeue()
+// newQueue.dequeue()
+// console.log('-------获取dequeue元素------',newQueue)
+// newQueue.enqueue(6)
+// newQueue.enqueue(7)
+// newQueue.enqueue(8)
+// newQueue.enqueue(9)
+// console.log('-------获取dequeue元素------',newQueue)
+// console.log(newQueue.dequeue());
 
-newQueue.enqueue(9)
-console.log('-------获取dequeue元素------',newQueue)
+// newQueue.enqueue(9)
+// console.log('-------获取dequeue元素------',newQueue)
 // newQueue.enqueue(6)
 // 获取元素
 // let res = 0
@@ -611,3 +611,76 @@ console.log('-------获取dequeue元素------',newQueue)
 //     res = newQueue.dequeue()
 //     console.log(res)
 // }
+
+/**
+ * 手动模拟new  1.创建一个obj对象 2.将obj的__proto__属性指向函数的prototype 3.将函数的this指向obj 4.返回obj
+ */
+// function newObj(fn){
+//   //获取剩余参数
+//   var argus = Array.prototype.slice.call(arguments,1);
+//   let obj = {};
+//   obj.__proto__ = fn.prototype;
+//   let res = fn.apply(obj,argus);
+//   return typeof res === 'undefined' ? obj : res;
+// }
+
+// function deDance(fn,time = 300){
+//   let id;
+//   return function(...argus){
+//     id && clearTimeout(id);
+//     id = setTimeout(()=>{
+//       fn.apply(this,argus);
+//     },time);
+//   }
+// }
+
+/**
+ * 手动模拟继承 sons-父类构造函数的私有属性 supe--父类构造函数
+ */
+// function createClass(sons, supe){
+
+//   function fn(age){
+//     supe.apply(this,sons);
+//     this.age = age; //子类私有属性
+//   }
+
+//   fn.prototype = Object.create(supe.prototype);
+//   fn.prototype.constructor = fn;
+
+//   return fn;
+// } 
+
+// function Parent() {
+//   this.name = 'fedaily'
+// }
+
+/**
+ * 实现对象的深拷贝
+ */
+// function copyObj(params){
+//   if(typeof params !== 'object'){
+//     return params;
+//   }
+//   let cur = Array.isArray(params) ? [] : {};
+//   for(let key in params){
+//     cur[key] = copyObj(params[key])
+//   }
+//   return cur;
+// }
+
+/**
+ * 实现函数的柯里化
+ */
+function curry(fn){
+  return function curried(){
+    let argus = Array.prototype.slice.call(arguments);
+    if(argus.length >= fn.length){
+      return fn.apply(this,argus);
+    }else{
+      return function(){
+        let argus_2 = Array.prototype.slice.call(arguments);
+        return curried.apply(this,argus.concat(argus_2));
+      }
+    }
+  }
+}
