@@ -1,5 +1,6 @@
-import React,{useState, useEffect, useRef} from "react";
+import React,{useState, useEffect, useRef, useCallback} from "react";
 import ReactDOM from "react-dom";
+import Toast from 'components/Toast/index';
 
 
 /**
@@ -401,4 +402,36 @@ import ReactDOM from "react-dom";
 
 // console.log(Example);
 
-ReactDOM.render(<Example />, document.getElementById("root"));
+const Item = (props) => {
+  const onClick = useCallback(()=>{
+    props.onClick()
+  },[props.text]);
+  return <div onClick={()=>{Toast.show('lalal',1000)}}>111</div>
+}
+
+class Iteml extends React.Component{
+  render(){
+    return (
+      <div onClick={()=>{console.log(222);Toast.show('lalal',1000)}}>111</div>
+    )
+  }
+}
+
+const Card = () => {
+  const [text,setText] = useState(1);
+  const onClick = useCallback(()=>{
+    console.log(text);
+  },[text]);
+  useEffect(()=>{
+    setTimeout(()=>{setText(2)},100);
+  },[text])
+
+  return (
+    <div>
+      <Item text={text} onClick={onClick}/>
+    </div>
+  )
+}
+
+const card = ()=>{return ReactDOM.render(<Card />, document.getElementById("root"));}
+console.log(card(),'card');

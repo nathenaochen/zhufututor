@@ -671,16 +671,213 @@
 /**
  * 实现函数的柯里化
  */
-function curry(fn){
-  return function curried(){
-    let argus = Array.prototype.slice.call(arguments);
-    if(argus.length >= fn.length){
-      return fn.apply(this,argus);
-    }else{
-      return function(){
-        let argus_2 = Array.prototype.slice.call(arguments);
-        return curried.apply(this,argus.concat(argus_2));
+// function curry(fn){
+//   return function curried(){
+//     let argus = Array.prototype.slice.call(arguments);
+//     if(argus.length >= fn.length){
+//       return fn.apply(this,argus);
+//     }else{
+//       return function(){
+//         let argus_2 = Array.prototype.slice.call(arguments);
+//         return curried.apply(this,argus.concat(argus_2));
+//       }
+//     }
+//   }
+// }
+
+// function copyObj(params){
+//   if(typeof params != 'object'){
+//     return params;
+//   }
+//   let cur = Array.isArray(params) ? [] : {};
+//   for(let key in params){
+//     if(params[key] instanceof Date){
+//       cur[key] = new Date(params[key]);
+//     }else if(params[key] instanceof RegExp){
+//       cur[key] = new RegExp(params[key]);
+//     }else if(typeof params[key] == 'object'){
+//       cur[key] = copyObj(params[key]);
+//     }else{
+//       cur[key] = params[key];
+//     }
+//   }
+//   return cur;
+// }
+
+// function fn1(next){
+//   console.log(1);
+//   next();
+//   console.log(2);
+// }
+// function fn2(next){
+//   console.log(3);
+//   next();
+//   console.log(4);
+// }
+// let fn3 = compose([fn1,fn2])()
+
+
+
+// function compose(arg){
+//   return function(){
+//     let fn1 = arg[0];
+//     let fn2 = arg[1].bind(null,function(){})
+//     fn1(fn2);
+//   }
+// }
+
+const arr = [
+  {id:1, parentId: null, name: 'a'},
+  {id:2, parentId: null, name: 'b'},
+  {id:3, parentId: 1, name: 'c'},
+  {id:4, parentId: 2, name: 'd'},
+  {id:5, parentId: 1, name: 'e'},
+  {id:6, parentId: 3, name: 'f'},
+  {id:7, parentId: 4, name: 'g'},
+  {id:8, parentId: 7, name: 'h'},
+  {id:9, parentId: 1, name: 'h'},
+  {id:10, parentId: 5, name: 'h'},
+]
+function arrToTree(arr){
+  if(!(arr instanceof Array)) return;
+  let map = {}, res = [];
+  arr.forEach((item,idx)=>{
+    map[item.id] = item;
+  })
+  for(let key in map){
+    let item = map[key];
+    if(item.parentId){
+      if(map[item.parentId].children){
+        map[item.parentId].children.push(item);
+      }else{
+        map[item.parentId].children = [];
+        map[item.parentId].children.push(item)
       }
+    }else{
+      res.push(item);
     }
   }
+  return res;
 }
+
+
+// function arrToTree(arr,pid){
+//   // if(!(arr instanceof Array)) return;
+//   let res = [];
+//   for(let item of arr){
+//     if(item.parentId === pid){
+//       let itemChildren = arrToTree(arr,item.id);
+//       if(itemChildren.length) item.children = itemChildren;
+//       res.push(item)
+//     }
+//   }
+//   return res;
+// }
+
+// console.log(arrToTree(arr,null));
+
+
+//树的深度优先遍历
+function dfs(tree){
+  let res = [];
+  let statck = Array.isArray(tree) ? [...tree] : [tree];
+  while(statck.length != 0){
+    let node = statck.shift();
+    console.log(node, '---');
+    res.push(node);
+    if(node.children && node.children.length){
+      let len = node.children.length;
+      for(let i = len - 1; i >= 0; i--){
+        statck.unshift(node.children[i]);
+      }
+    }
+    console.log(statck,'====')
+  }
+  return res;
+}
+
+//树的广度优先遍历
+// function bfs(tree){
+//   let res = [];
+//   let statck = Array.isArray(tree) ? [...tree] : [tree];
+//   while(statck.length != 0){
+//     let node = statck.pop();
+//     res.push(node);
+//     if(node.children && node.children.length){
+//       let len = node.children.length;
+//       for(let i = 0; i < len; i++){
+//         statck.push(node.children[i]);
+//       }
+//     }
+//   }
+//   return res;
+// }
+
+// console.log(bfs(arrToTree(arr)))
+
+function moneyFormat(number, decimals = '2', dec_point = '.', thousands_sep = ',') {
+  //对参数的合法性做校验
+  if(number === null || number === undefined || number === '') return '';
+  number = (number + '').replace(/[^0-9+-Ee.]/g, '');
+  let n = !isFinite(+number) ? 0 : +number;
+      prec = !isFinite(+decimals) ? 0 : Math.abs(decimals);
+      dec = (typeof dec_point === 'undefined') ? '.' : dec_point;
+      sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep;
+      str = '',
+      toFixedNum = function(num,prec) {
+        let k = Math.pow(10,prec);
+        return '' + Math.round(num * k) / k;
+      };
+      str = (prec ? toFixedNum(n,prec) : '' + Math.round(n)).split('.');
+      //处理千分位
+      let re = /(-?\d+)(\d{3})/;
+      while(re.test(str[0])){
+        str[0] = str[0].replace(re,"$1" + sep + "$2");
+      }
+      if((str[1] || '').length < +prec){
+        str[1] = str[1] || ''
+        str[1] += new Array(prec - str[1].length + 1).join('0');
+      }
+      return str.join(dec);
+}
+
+
+function toFiexdMoneyFormat(money) {
+  var len = money ? money.length : 0;
+
+  if (len > 20 || len < 0 || +money <= 0) {
+    return console.log('请输入有效的金额数');
+  }
+
+  let ends = '.00', str = '';
+  let dotIdx = money.indexOf('.');
+
+  if (dotIdx !== -1) {
+    len = len - 3;
+    ends = money.slice(dotIdx)
+  }
+
+  for (let i = len - 1; i >= 0; i--) {
+    let j = len - i - 1;
+
+    str += money[j];
+    if (i % 3 === 0 && i !== 0) {
+      str += ',';
+    }
+  }
+  return str + ends;
+} 
+
+function money(number,des = 2,sap = ','){
+  //匹配出0-9和.以外的其他字符，限定输入的number只能包含数字和点，否则判定为不合法
+  let reg = /[^0-9.]/
+  //对参数的合法性做校验
+  if(number === null || number === undefined || number === '' || isNaN(number) || reg.test(number)) return '--';
+  let str = '';
+  function toFixedNum(num,des){
+    let k = Math.pow(10,prec);
+    return '' + Math.round(num * k) / k;
+  }
+
+}
+console.log(moneyFormat('99459.65523'),'---',toFiexdMoneyFormat('99459.65523'))
