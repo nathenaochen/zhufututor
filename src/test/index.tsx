@@ -305,6 +305,7 @@ import Toast from 'components/Toast/index';
 //   )
 
 // }
+
 //自定义hook 实现状态逻辑复用
 // function useFriendState(state){
 //   console.log('自定义useFriendState开始');
@@ -403,35 +404,38 @@ import Toast from 'components/Toast/index';
 // console.log(Example);
 
 const Item = (props) => {
+  const {text} = props;
+  const {a} = text;
   const onClick = useCallback(()=>{
-    props.onClick()
-  },[props.text]);
-  return <div onClick={()=>{Toast.show('lalal',1000)}}>111</div>
+    console.log(props.text.a);
+  },[a]);
+  return <div onClick={()=>{onClick()}}>111</div>
 }
 
-class Iteml extends React.Component{
-  render(){
-    return (
-      <div onClick={()=>{console.log(222);Toast.show('lalal',1000)}}>111</div>
-    )
-  }
-}
+// class Iteml extends React.Component{
+//   render(){
+//     return (
+//       <div onClick={()=>{console.log(222);Toast.show('lalal',1000)}}>111</div>
+//     )
+//   }
+// }
 
 const Card = () => {
-  const [text,setText] = useState(1);
-  const onClick = useCallback(()=>{
-    console.log(text);
-  },[text]);
+  const [text,setText] = useState({a:1});
+  // const onClick = useCallback(()=>{
+  //   console.log(text);
+  // },[text]);
   useEffect(()=>{
-    setTimeout(()=>{setText(2)},100);
+    setTimeout(()=>{setText({a:2})},5000);
   },[text])
 
   return (
     <div>
-      <Item text={text} onClick={onClick}/>
+      <Item text={text}/>
     </div>
   )
 }
 
-const card = ()=>{return ReactDOM.render(<Card />, document.getElementById("root"));}
-console.log(card(),'card');
+ReactDOM.render(<Card />, document.getElementById("root"));
+
+// const card = ()=>{return ReactDOM.render(<Card />, document.getElementById("root"));}
