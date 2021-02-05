@@ -2,6 +2,8 @@ import React,{useState, useEffect, useRef, useCallback} from "react";
 import ReactDOM from "react-dom";
 import Toast from 'components/Toast/index';
 import {isAndroid} from 'utils/tool';
+import ArrowSvg from 'components/ArrowSvg';
+import styles from './test.less';
 
 
 /**
@@ -284,38 +286,37 @@ import {isAndroid} from 'utils/tool';
 /**
  * 测试自定义hook
  */
-function LifeCycleContainer(){
-  console.log('父组件开始');
-  const [state, setState] = useState(true);
-  // const isOnline = useFriendState(state);
+// function LifeCycleContainer(){
+//   console.log('父组件开始');
+//   const [state, setState] = useState(true);
+//   // const isOnline = useFriendState(state);
 
-  useEffect(()=>{
-    console.log('父组件useeffect');
-    console.log(isAndroid(),'is')
-  })
+//   useEffect(()=>{
+//     console.log('父组件useeffect');
+//     console.log(isAndroid(),'is')
+//   })
 
-  console.log('父组件retuen前',state);
-  return (
-    <div>
-      {/* {isOnline} */}
-      <Child />
-      {state ? 'hahah' : 'lalal'}
-      <div onClick={()=>{
-        // setTimeout(()=>{
-        //   setState(false);
-        // console.log(state,'4545');
-        // setState(true);
-        // console.log(state,'111');
-        // },1000)
-        setState(false);
-        console.log(state,'4545');
-        setState(true);
-        console.log(state,'111');
-        }}>anniu </div>
-    </div>
-  )
-
-}
+//   console.log('父组件retuen前',state);
+//   return (
+//     <div>
+//       {/* {isOnline} */}
+//       <Child />
+//       {state ? 'hahah' : 'lalal'}
+//       <div onClick={()=>{
+//         // setTimeout(()=>{
+//         //   setState(false);
+//         // console.log(state,'4545');
+//         // setState(true);
+//         // console.log(state,'111');
+//         // },1000)
+//         setState(false);
+//         console.log(state,'4545');
+//         setState(true);
+//         console.log(state,'111');
+//         }}>anniu </div>
+//     </div>
+//   )
+// }
 
 //自定义hook 实现状态逻辑复用
 // function useFriendState(state){
@@ -334,19 +335,19 @@ function LifeCycleContainer(){
 //   // return [isOnline,setIsOnline]
 // }
 
-function Child(){
-  console.log('子组件开始');
+// function Child(){
+//   console.log('子组件开始');
 
-  useEffect(()=>{
-    console.log('子组件useeffect');
-  })
+//   useEffect(()=>{
+//     console.log('子组件useeffect');
+//   })
 
 
-  console.log('子组件return前');
-  return (
-    <div>子组件</div>
-  )
-}
+//   console.log('子组件return前');
+//   return (
+//     <div>子组件</div>
+//   )
+// }
 
 
 /**
@@ -477,6 +478,7 @@ function Child(){
 //   )
 // }
 
-ReactDOM.render(<LifeCycleContainer />, document.getElementById("root"));
+
+ReactDOM.render(<ArrowSvg fill="red" className={styles['arrow']}/>, document.getElementById("root"));
 
 // const card = ()=>{return ReactDOM.render(<Card />, document.getElementById("root"));}  <div dangerouslySetInnerHTML={{__html: JSON.stringify(Myimg)}}></div>
