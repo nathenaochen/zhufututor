@@ -174,3 +174,12 @@ export function timeFromat(time:any,server_time?:any){
     }
   }
 }
+
+/**
+ * 判断手机是否是安卓
+ */
+export function isAndroid(){
+  const u = navigator.userAgent;
+  const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
+  return isAndroid;
+}

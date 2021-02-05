@@ -1,6 +1,7 @@
 import React,{useState, useEffect, useRef, useCallback} from "react";
 import ReactDOM from "react-dom";
 import Toast from 'components/Toast/index';
+import {isAndroid} from 'utils/tool';
 
 
 /**
@@ -283,28 +284,38 @@ import Toast from 'components/Toast/index';
 /**
  * 测试自定义hook
  */
-// function LifeCycleContainer(){
-//   console.log('父组件开始');
-//   const [state, setState] = useState(true);
-//   // const isOnline = useFriendState(state);
+function LifeCycleContainer(){
+  console.log('父组件开始');
+  const [state, setState] = useState(true);
+  // const isOnline = useFriendState(state);
 
-//   useEffect(()=>{
-//     console.log('父组件useeffect');
-//   })
+  useEffect(()=>{
+    console.log('父组件useeffect');
+    console.log(isAndroid(),'is')
+  })
 
-//   console.log('父组件retuen前');
-//   return (
-//     <div>
-//       {/* {isOnline} */}
-//       <Child />
-//       {state ? 'hahah' : 'lalal'}
-//       <div onClick={()=>{
-//         setState(!state);
-//         }}>anniu </div>
-//     </div>
-//   )
+  console.log('父组件retuen前',state);
+  return (
+    <div>
+      {/* {isOnline} */}
+      <Child />
+      {state ? 'hahah' : 'lalal'}
+      <div onClick={()=>{
+        // setTimeout(()=>{
+        //   setState(false);
+        // console.log(state,'4545');
+        // setState(true);
+        // console.log(state,'111');
+        // },1000)
+        setState(false);
+        console.log(state,'4545');
+        setState(true);
+        console.log(state,'111');
+        }}>anniu </div>
+    </div>
+  )
 
-// }
+}
 
 //自定义hook 实现状态逻辑复用
 // function useFriendState(state){
@@ -323,19 +334,19 @@ import Toast from 'components/Toast/index';
 //   // return [isOnline,setIsOnline]
 // }
 
-// function Child(){
-//   console.log('子组件开始');
+function Child(){
+  console.log('子组件开始');
 
-//   useEffect(()=>{
-//     console.log('子组件useeffect');
-//   })
+  useEffect(()=>{
+    console.log('子组件useeffect');
+  })
 
 
-//   console.log('子组件return前');
-//   return (
-//     <div>子组件</div>
-//   )
-// }
+  console.log('子组件return前');
+  return (
+    <div>子组件</div>
+  )
+}
 
 
 /**
@@ -403,14 +414,14 @@ import Toast from 'components/Toast/index';
 
 // console.log(Example);
 
-const Item = (props) => {
-  const {text} = props;
-  const {a} = text;
-  const onClick = useCallback(()=>{
-    console.log(props.text.a);
-  },[a]);
-  return <div onClick={()=>{onClick()}}>111</div>
-}
+// const Item = (props) => {
+//   const {text} = props;
+//   const {a} = text;
+//   const onClick = useCallback(()=>{
+//     console.log(props.text.a);
+//   },[a]);
+//   return <div onClick={()=>{onClick()}}>111</div>
+// }
 
 // class Iteml extends React.Component{
 //   render(){
@@ -420,22 +431,52 @@ const Item = (props) => {
 //   }
 // }
 
-const Card = () => {
-  const [text,setText] = useState({a:1});
-  // const onClick = useCallback(()=>{
-  //   console.log(text);
-  // },[text]);
-  useEffect(()=>{
-    setTimeout(()=>{setText({a:2})},5000);
-  },[text])
+// const Card = () => {
+//   const [text,setText] = useState({a:1});
+//   // const onClick = useCallback(()=>{
+//   //   console.log(text);
+//   // },[text]);
+//   useEffect(()=>{
+//     setTimeout(()=>{setText({a:2})},5000);
+//   },[text])
 
-  return (
-    <div>
-      <Item text={text}/>
-    </div>
-  )
-}
+//   return (
+//     <div>
+//       <Item text={text}/>
+//     </div>
+//   )
+// }
 
-ReactDOM.render(<Card />, document.getElementById("root"));
 
-// const card = ()=>{return ReactDOM.render(<Card />, document.getElementById("root"));}
+// function MyImage(){
+//   const [Myimg,setMyimg] = useState(null);
+
+//   function loadImgAsync(url){
+//     return new Promise((res,rej)=>{
+//       const myImg = new Image();
+//       myImg.onload=function(){
+//         res(myImg);
+//       }
+//       myImg.onerror=function(){
+//         rej('加载图片'+url+'报错');
+//       }
+//       myImg.src = url;
+//     })
+//   }
+//   useEffect(()=>{
+//     loadImgAsync('https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3363295869,2467511306&fm=26&gp=0.jpg').then((data)=>{
+//       if(typeof data != 'string'){
+//         console.log(data,11,typeof data);
+//         setMyimg(data.toString());
+//       }
+//     })
+//   },[]);
+//   console.log(Myimg);
+//   return (
+//     Myimg ?  Myimg : <div>1</div>
+//   )
+// }
+
+ReactDOM.render(<LifeCycleContainer />, document.getElementById("root"));
+
+// const card = ()=>{return ReactDOM.render(<Card />, document.getElementById("root"));}  <div dangerouslySetInnerHTML={{__html: JSON.stringify(Myimg)}}></div>

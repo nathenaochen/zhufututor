@@ -13,6 +13,8 @@
 // }
 // console.log(sortVersion(demo));
 
+const { isBreakStatement } = require("typescript");
+
 
 
 // function NetReq(num){
@@ -815,69 +817,633 @@ function dfs(tree){
 
 // console.log(bfs(arrToTree(arr)))
 
-function moneyFormat(number, decimals = '2', dec_point = '.', thousands_sep = ',') {
-  //对参数的合法性做校验
-  if(number === null || number === undefined || number === '') return '';
-  number = (number + '').replace(/[^0-9+-Ee.]/g, '');
-  let n = !isFinite(+number) ? 0 : +number;
-      prec = !isFinite(+decimals) ? 0 : Math.abs(decimals);
-      dec = (typeof dec_point === 'undefined') ? '.' : dec_point;
-      sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep;
-      str = '',
-      toFixedNum = function(num,prec) {
-        let k = Math.pow(10,prec);
-        return '' + Math.round(num * k) / k;
-      };
-      str = (prec ? toFixedNum(n,prec) : '' + Math.round(n)).split('.');
-      //处理千分位
-      let re = /(-?\d+)(\d{3})/;
-      while(re.test(str[0])){
-        str[0] = str[0].replace(re,"$1" + sep + "$2");
+// function moneyFormat(number, decimals = '2', dec_point = '.', thousands_sep = ',') {
+//   //对参数的合法性做校验
+//   if(number === null || number === undefined || number === '') return '';
+//   number = (number + '').replace(/[^0-9+-Ee.]/g, '');
+//   let n = !isFinite(+number) ? 0 : +number;
+//       prec = !isFinite(+decimals) ? 0 : Math.abs(decimals);
+//       dec = (typeof dec_point === 'undefined') ? '.' : dec_point;
+//       sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep;
+//       str = '',
+//       toFixedNum = function(num,prec) {
+//         let k = Math.pow(10,prec);
+//         return '' + Math.round(num * k) / k;
+//       };
+//       str = (prec ? toFixedNum(n,prec) : '' + Math.round(n)).split('.');
+//       //处理千分位
+//       let re = /(-?\d+)(\d{3})/;
+//       while(re.test(str[0])){
+//         str[0] = str[0].replace(re,"$1" + sep + "$2");
+//       }
+//       if((str[1] || '').length < +prec){
+//         str[1] = str[1] || ''
+//         str[1] += new Array(prec - str[1].length + 1).join('0');
+//       }
+//       return str.join(dec);
+// }
+
+
+// function toFiexdMoneyFormat(money) {
+//   var len = money ? money.length : 0;
+
+//   if (len > 20 || len < 0 || +money <= 0) {
+//     return console.log('请输入有效的金额数');
+//   }
+
+//   let ends = '.00', str = '';
+//   let dotIdx = money.indexOf('.');
+
+//   if (dotIdx !== -1) {
+//     len = len - 3;
+//     ends = money.slice(dotIdx)
+//   }
+
+//   for (let i = len - 1; i >= 0; i--) {
+//     let j = len - i - 1;
+
+//     str += money[j];
+//     if (i % 3 === 0 && i !== 0) {
+//       str += ',';
+//     }
+//   }
+//   return str + ends;
+// } 
+
+// function money(number,des = 2,sap = ','){
+//   //匹配出0-9和.以外的其他字符，限定输入的number只能包含数字和点，否则判定为不合法
+//   let reg = /[^0-9.]/
+//   //对参数的合法性做校验
+//   if(number === null || number === undefined || number === '' || isNaN(number) || reg.test(number)) return '--';
+//   let str = '';
+//   function toFixedNum(num,des){
+//     let k = Math.pow(10,prec);
+//     return '' + Math.round(num * k) / k;
+//   }
+
+// }
+// console.log(moneyFormat('99459.65523'),'---',toFiexdMoneyFormat('99459.65523'))
+// /(\d)(?=(\d{3})+$)/g
+
+/*
+function mainInstanceof(left,right){
+  let pro = left.__proto__;
+  while(true){
+    if(pro === right.prototype){
+      return true;
+    }else if(pro === null){
+      return false;
+    }
+    pro = pro.__proto__;
+  }
+}
+let a = [1,2];
+let b = {a:1}
+console.log(mainInstanceof(b,Array),b instanceof Array);
+*/
+
+/*
+function de(fn,time=500){
+  let id = null;
+  return function (){
+    if(id == null){
+      fn.apply(this,arguments);
+      id = '';
+      return ;
+    }
+    id && clearTimeout(id);
+    id = setTimeout(()=>{
+      fn.apply(this,arguments);
+    },time);
+  }
+}
+*/
+/* peomiseall实现
+function promiseAll(arr){
+  if(!Array.isArray(arr)) return;
+  return new Promise((res,rej)=>{
+    let result = [], count = 0, len = arr.length;
+    arr.forEach((item,idx)=>{
+      if(item instanceof Promise){
+        item.then((data)=>{
+          count++;
+          result[idx] = data
+          if(count == len){
+            res(result);
+          }
+        }).catch(e => rej(e))
       }
-      if((str[1] || '').length < +prec){
-        str[1] = str[1] || ''
-        str[1] += new Array(prec - str[1].length + 1).join('0');
-      }
-      return str.join(dec);
+    });
+  });
 }
 
+function pro1(){
+  return new Promise((res,rej)=>{
+    // res(100);
+    // throw new Error('test')
+    setTimeout(()=>{
+      res(100);
+      // throw new Error('test')
+      try{throw new Error('test')}catch(err){console.log(1)}
+      // setTimeout(function () { try{throw new Error('test')}catch(err){console.log(1)} }, 0)
+    },100);
+  })
+}
+function pro2(){
+  return new Promise((res,rej)=>{
+      setTimeout(()=>{
+        try{
+          res(200+a);
+          throw new Error('啊哈哈哈');
+        }catch(err){
+          rej(err)
+        }
+      },200);
+  }).catch(e=>e.message)
+}
+function pro3(){
+  return new Promise((res,rej)=>{
+      setTimeout(()=>{
+        try{
+          res(300);
+        }catch(err){
+          rej(err);
+        }
+      },10);
+  })
+}
 
-function toFiexdMoneyFormat(money) {
-  var len = money ? money.length : 0;
+    
+async function test(){
+  try{
+    const res = await promiseAll([pro1(),pro2(),pro3()]);
+    // const res = await pro1();
+    console.log(res,565665);
+  }catch(err){
+    console.log(34343);
+    throw new Error(err);
+  }
+}
+test().catch(err => {console.log(err.message)});
 
-  if (len > 20 || len < 0 || +money <= 0) {
-    return console.log('请输入有效的金额数');
+
+// const promise = new Promise(function (resolve, reject) {
+//   resolve('ok');
+//   setTimeout(function () { try{throw new Error('test')}catch(err){console.log(1)} }, 0)
+// });
+// promise.then(function (value) { console.log(value) });
+
+
+// resolve 的值是 undefined
+// Promise.resolve(2).then(() => {}, () => {}).then(data => console.log(data))
+
+// // resolve 的值是 2
+// Promise.resolve(2).finally(() => {}).then(data => console.log(data))
+
+// // reject 的值是 undefined
+// Promise.reject(3).then(() => {}, () => {}).catch(data => console.log(data))
+
+// // reject 的值是 3
+// Promise.reject(3).finally(() => {}).catch(data => console.log(data))
+*/
+
+
+
+// function a(){
+//   console.log(this,1)
+// }
+// function test(){
+//   // const a = () => {
+//   //   console.log(this,1)
+//   // }
+//   function a(){
+//     console.log(this,1)
+//   }
+//   return a;
+// }
+// const obj1 = {};
+// const obj2 = {};
+// obj1.test = test;
+// obj2.fun = obj1.test();
+// obj2.fun();
+
+/* promise.race 实现
+function promiseRace(arr){
+  if(!Array.isArray(arr)) return ;
+  return new Promise((reslove,reject)=>{
+    arr.forEach((item)=>{
+      if(!(item instanceof Promise)) item = Promise.resolve(item);
+      item.then((data)=>{
+        reslove(data)
+      }).catch(err => reject(err));
+    });
+  });
+
+}
+
+function pro1(){
+  return new Promise((res,rej)=>{
+    setTimeout(()=>{
+      rej(100);
+      // setTimeout(function () { try{throw new Error('test')}catch(err){console.log(1)} }, 0)
+    },100);
+  })
+}
+function pro2(){
+  return new Promise((res,rej)=>{
+      setTimeout(()=>{
+        try{
+          res(200+a);
+          throw new Error('啊哈哈哈');
+        }catch(err){
+          rej(err)
+        }
+      },200);
+  }).catch(e=>e.message)
+}
+function pro3(){
+  return new Promise((res,rej)=>{
+      setTimeout(()=>{
+        try{
+          res(300);
+        }catch(err){
+          rej(err);
+        }
+      },100);
+  })
+}
+async function test(){
+  try{
+    const res = await promiseRace([pro1(),pro2(),pro3()]);
+    // const res = await pro1();
+    console.log(res,565665);
+  }catch(err){
+    // console.log(34343);
+    throw new Error(err);
+  }
+}
+test().catch(err => {console.log('err',err.message)});
+*/
+
+/*
+function promiseAllSettlled(arr){
+  if(!Array.isArray(arr)) return;
+  let count = 0, len = arr.length, result = [];
+  return new Promise((reslove,reject)=>{
+    arr.forEach((item,idx)=>{
+      if(!(item instanceof Promise)) item = Promise.resolve(item);
+      item.then((data)=>{
+        count++;
+        result[idx] = {status:'fulfilled',value:data};
+        if(len == result.length){
+          reslove(result);
+        }
+      }).catch((err)=>{
+        count++;
+        result[idx] = {status:'reject',reason: err}
+        if(len == result.length){
+          reslove(result);
+        }
+      })
+    });
+  });
+}
+
+const resolved = Promise.resolve(42);
+const rejected = Promise.reject(-1);
+const allSettledPromise = promiseAllSettlled([resolved, rejected]);
+
+allSettledPromise.then(function (results) {
+  console.log(results);
+});
+*/
+
+/* promise.any 实现
+function PromiseAny(arr){
+  if(!Array.isArray(arr)) return;
+  let count = 0, len = arr.length, result = [];
+  return new Promise((reslove,reject)=>{
+    arr.forEach((item,idx)=>{
+      if(!(item instanceof Promise)) item = Promise.reslove(item);
+      item.then(data => {
+        reslove(data);
+      }).catch(err => {
+        count++;
+        result[idx] = err;
+        if(len == result.length){
+          reject(result);
+        }
+      })
+    })
+  });
+}
+var resolved = Promise.resolve(42);
+var rejected = Promise.reject(-1);
+var alsoRejected = Promise.reject(Infinity);
+
+// PromiseAny([resolved, rejected, alsoRejected]).then(function (result) {
+//   console.log(result); // 42
+// });
+
+PromiseAny([rejected, alsoRejected]).catch(function (results) {
+  console.log(results); // [-1, Infinity]
+});
+*/
+
+/*实现Promise.reslove
+function promiseReslove(params){
+  if(params instanceof Promise){
+    return params;
+  }else if(typeof params == 'object' && params.then){
+    return new Promise((reslove,reject)=>{
+      params.then(reslove);
+    });
+  }else if(typeof params != undefined){
+    return new Promise((reslove,reject)=>{
+      reslove(params);
+    });
+  }else{
+    return new Promise((reslove,reject)=>{
+      reslove();
+    });
+  }
+}
+
+let thenable = {
+  then: function(resolve, reject) {
+    resolve(42);
+  }
+};
+
+let p1 = Promise.resolve(new Promise((res)=>{res(100)}));
+// let p1 = Promise.resolve(thenable);
+// const p1 = Promise.resolve('Hello');
+// const p1 = Promise.resolve();
+p1.then(function (value) {
+  console.log(value);  // 42
+});
+
+let p2 = Promise.resolve(new Promise((res)=>{res(100)}));
+// let p2 = promiseReslove(thenable);
+// const p2 = Promise.resolve('Hello');
+// const p2 = Promise.resolve();
+p2.then(function (value) {
+  console.log(value);  // 42
+});
+*/
+
+// const f = () =>{ return new Promise((res)=>{
+//   console.log('now');setTimeout(()=>{res(100)},0)
+// }).then(()=> 99);};
+// (
+//   () => new Promise(
+//     resolve => resolve(f())
+//   )
+// )().then(data => console.log(data,11));
+// console.log('next');
+
+// function mainInstanceof(left,right){
+//   let pro = left.__proto__;
+//   while(true){
+//     if(pro === right.prototype){
+//       return true;
+//     }else if(pro === null){
+//       return false;
+//     }
+//     pro = pro.__proto__;
+//   }
+// }
+
+// let a = [1,2];
+// let b = {a:1}
+// console.log(mainInstanceof(a,Object),a instanceof Object);
+
+// function strTem(str,obj){
+//   let reg = /\$\{(\w*?)\}/g
+//   let str1 = str.replace(reg,function(item,$1){
+//     return obj[$1];
+//   });
+//   return str1;
+// }
+// var str = 'hi, my name is ${name},my age is ${age}';
+// var obj = {name:'JACK', age: '13'}
+// console.log(strTem(str,obj));
+
+/*
+function _setInterVal(callback,time=0,...argus){
+  let target = {id: null};
+  function fn(){
+    target.id = setTimeout(()=>{
+      callback.apply(this,argus);
+      fn();
+    },time);
+  }
+  fn();
+  return target;
+}
+function _clearInterval(id){
+  clearTimeout(id)
+}
+
+var id = _setInterVal((a)=>{console.log(a)},1000,'123');
+setTimeout(()=>{_clearInterval(id.id);},5000)
+*/
+
+// function throttle(fn,time=300){
+//   let off = true;
+//   return function(){
+//     if(!off) return;
+//     off = false;
+//     setTimeout(async ()=>{
+//       await fn.apply(this,arguments);
+//       off = true;
+//     },time);
+//   }
+// }
+
+// function debounce(fn,time=300,immediately=true){
+//   let id = null, flag = true;
+//   return function(){
+//     if(flag && immediately){
+//       fn.apply(this,arguments);
+//       flag = false;
+//       return;
+//     }
+//     id && clearTimeout(id);
+//     id = setTimeout(()=>{
+//       fn.apply(this,arguments)
+//     },time);
+//   }
+// }
+
+/*
+Function.prototype.myCall = function(point,...argus){
+  point = point || window;
+  if(typeof this != 'function' || typeof point != 'object') return;
+  point.self = this;
+  const res = eval('point.self('+argus+')');
+  delete point.self;
+  return res;
+}
+
+let obj = {a:8};
+    function fn(a,b,c) {
+      console.log(this.a);
+      console.log(a);
+      console.log(b);
+      console.log(c);
+      return 9999;
+    }
+    console.log(fn.myCall(obj,1));
+*/
+/*
+var a = 9
+Function.prototype.myBind = function(point,...argus){
+  point = point || window;
+  if(typeof this != 'function' || typeof point != 'object') return ;
+  point.self = this;
+  return function (...argus_1){
+    let params = argus.concat(argus_1);
+    const res = eval('point.self('+params+')');
+    delete point.self;
+    return res;
+  }
+}
+
+let obj = {a:8};
+    function fn(a,b,c) {
+      console.log(this.a);
+      console.log(a);
+      console.log(b);
+      console.log(c);
+      return 9999;
+    }
+  const fn_1 = fn.myBind(global,1);
+  fn_1(2,3);
+*/
+
+/* 封装jsonp
+
+  function getJsonP(url,params){
+    return new Promise((reslove,reject)=>{
+      try{
+        let srcriptDom = document.createElement('script');
+        let str = '';
+        window._cb = reslove;
+        if(params && typeof params === 'object'){
+          for(let key in params){
+            str += key + '=' + params[key] + '&'
+          }
+        }
+        if(str != ''){
+          url = url + '?' + str + 'callback=_cb';
+        }else{
+          url = url + '?' + 'callback=_cb';
+        }
+        srcriptDom.src = url;
+        srcriptDom.onload = function(){
+          delete window._cb;
+          this.remove();
+        }
+        document.body.appendChild(scriptDom);
+      }catch(err){
+        reject(err);
+      }
+    })
   }
 
-  let ends = '.00', str = '';
-  let dotIdx = money.indexOf('.');
+  getJsonP('http://www.baidu.com',{a:1,b:2});
+*/
 
-  if (dotIdx !== -1) {
-    len = len - 3;
-    ends = money.slice(dotIdx)
-  }
+/* 手动实现ajax
+function myAjax(params){
+  return new Promise((reslove,reject)=>{
+    try{
+      let defaultParams = {
+        method: 'GET',
+        async: true,
+        data: '',
+        setHeader: function(){},
+      }
+      if(typeof params !== 'object' && !params.url){
+        reject('参数不对');
+        return ;
+      }
+      for(let key in params){
+        defaultParams[key] = params[key];
+      }
+      let xml = new XMLHttpRequest();
+      if(defaultParams['method'].toUpperCase() = 'GET' && defaultParams['data'] && typeof defaultParams['data'] === 'string'){
+        defaultParams['url'] += '?' + defaultParams['data'];
+      }
+      xml.open(defaultParams['url'],defaultParams['method'],defaultParams['async']);
+      defaultParams.setHeader(xml);
+      xml.send(data);
+      xml.onreadystatechange = function(){
+        if(this.readyState === 4 && this.status === 200){
+          reslove(xml.response);
+        }else{
+          reject(xml.status);
+        }
+      }
+    }catch(err){
+      reject(err);
+    }
+  });
+}
 
-  for (let i = len - 1; i >= 0; i--) {
-    let j = len - i - 1;
+myAjax({url:'http://www.baidu.com'}); 
+*/
 
-    str += money[j];
-    if (i % 3 === 0 && i !== 0) {
-      str += ',';
+// function arrToTree(arr){
+//   if(!(arr instanceof Array)) return;
+//   let obj = {}, res = [];
+//   arr.forEach((item)=>{
+//     obj[item.id] = item;
+//   })
+//   for(let key in obj){
+//     let item = obj[key]
+//     if(item.parentId){
+//       if(obj[item.parentId].children){
+//         obj[item.parentId].children.push(item);
+//       }else{
+//         obj[item.parentId].children = [];
+//         obj[item.parentId].children.push(item);
+//       }
+//     }else{
+//       res.push(item)
+//     }
+//   }
+//   return res;
+// }
+
+function dfs(tree){
+  if(typeof tree !== 'object') return;
+  let res = [];
+  let statck = Array.isArray(tree) ? tree : [tree];
+  while(statck.length != 0){
+    let node = statck.shift();
+    res.push(node);
+    if(node && node.children && node.children.length > 0){
+      for(let i = node.children.length - 1; i >= 0; i--){
+        statck.unshift(node.children[i]);
+      }
     }
   }
-  return str + ends;
-} 
-
-function money(number,des = 2,sap = ','){
-  //匹配出0-9和.以外的其他字符，限定输入的number只能包含数字和点，否则判定为不合法
-  let reg = /[^0-9.]/
-  //对参数的合法性做校验
-  if(number === null || number === undefined || number === '' || isNaN(number) || reg.test(number)) return '--';
-  let str = '';
-  function toFixedNum(num,des){
-    let k = Math.pow(10,prec);
-    return '' + Math.round(num * k) / k;
-  }
-
+  return res;
 }
-console.log(moneyFormat('99459.65523'),'---',toFiexdMoneyFormat('99459.65523'))
+
+
+function srot(arr){
+  for(let i = 1; i < arr.length; i++){
+    let item = arr[i];
+    for(let j = i - 1; j>=0; j--){
+      if(arr[j] > item){
+        arr[j+1] = arr[j];
+      }else{
+        break;
+      }
+    }
+    arr[j] = item
+  }
+}
