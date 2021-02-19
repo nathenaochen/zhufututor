@@ -33,6 +33,10 @@ const prodConfig = {
         })
     ],
     optimization: {
+      // usedExports: true,
+      // sideEffects: true,
+      // providedExports: false,   //将 optimization.providedExports 配置为 false（方法名称不会被缩写），
+      // concatenateModules: false,  //  optimization.concatenateModules 也配置为 false（多个 js 代码块不会被放到同一个方法中）
       splitChunks: {
         cacheGroups: {
           // baseReact: {
@@ -45,7 +49,7 @@ const prodConfig = {
             test: /node_modules/,
             name: 'vendor',
             chunks: 'all',
-            priority: -1,
+            priority: -10,
           }
         }
       },

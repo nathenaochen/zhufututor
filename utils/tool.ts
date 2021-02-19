@@ -183,3 +183,35 @@ export function isAndroid(){
   const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
   return isAndroid;
 }
+
+/**
+ * H5判断当前页面是否可见
+ * hidden: 用于判断当前是否支持隐藏显示
+ * visibilityChange：当前隐藏显示事件的名称
+ */
+let hidden, visibilityChange;
+if(typeof document.hidden !== 'undefined'){
+  hidden = 'hidden';
+  visibilityChange = 'visibilitychange';
+}else if(typeof document.msHidden !== 'undefined'){
+  hidden = 'msHidden';
+  visibilityChange = 'msvisibilitychange';
+}else if(typeof document.webkitHidden !== 'undefined'){
+  hidden = 'webkitHidden';
+  visibilityChange = 'webkitvisibilitychange';
+}
+
+//暴露出是否支持visibilityChange的api
+export const isSupportVisibilityApi = Boolean(hidden);
+
+//暴露添加visibilitychange事件的lister的api
+export function addPageVisibilityListener(hander){
+  if(typeof hander !== 'function'){
+    return;
+  }
+  const newHander = evt => hander(document[hidden],evt)
+  document.addEventListener(visibilityChange,newHander,false);
+  return () => {
+    document.removeEventListener(visibilityChange,newHander);
+  }
+}

@@ -1,5 +1,6 @@
 import React,{useState, useEffect, useRef, useCallback} from "react";
 import ReactDOM from "react-dom";
+import {formatmoney,aa} from 'ts-lib-cli';
 import Toast from 'components/Toast/index';
 import {isAndroid} from 'utils/tool';
 import ArrowSvg from 'components/ArrowSvg';
@@ -479,6 +480,22 @@ import styles from './test.less';
 // }
 
 
-ReactDOM.render(<ArrowSvg fill="red" className={styles['arrow']}/>, document.getElementById("root"));
+function Auo(props) {
+
+  useEffect(()=>{
+    let a = formatmoney();
+    console.log(a,'a');
+  },[]);
+
+  return (
+    <div>
+      <audio src="http://39.99.174.23/static/music/ybslda.mp3" controls={true} loop={true}>
+
+      </audio>
+    </div>
+  )
+}
+
+ReactDOM.render(<Auo />, document.getElementById("root"));
 
 // const card = ()=>{return ReactDOM.render(<Card />, document.getElementById("root"));}  <div dangerouslySetInnerHTML={{__html: JSON.stringify(Myimg)}}></div>
