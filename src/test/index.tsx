@@ -1,11 +1,10 @@
 import React,{useState, useEffect, useRef, useCallback} from "react";
 import ReactDOM from "react-dom";
-import {formatmoney,aa} from 'ts-lib-cli';
+import {formatmoney,aa} from 'tools-nathen';
 import Toast from 'components/Toast/index';
 import {isAndroid} from 'utils/tool';
 import ArrowSvg from 'components/ArrowSvg';
 import styles from './test.less';
-
 
 /**
  * 测试React15 生命周期代码用例
@@ -483,12 +482,17 @@ import styles from './test.less';
 function Auo(props) {
 
   useEffect(()=>{
-    let a = formatmoney();
-    console.log(a,'a');
+    let a = formatmoney(1);
+    // console.log(new Set([1,23]),'a');
+  //   let a = [1,2,3]
+  // let obj = {a:1}
+
+  // console.log('formatmoney',[...a],a.includes(3),new Set(a),obj?.a, Array.from({length:3}));
   },[]);
 
   return (
     <div>
+      <ArrowSvg className={styles['arrow']} fill='red'/>
       <audio src="http://39.99.174.23/static/music/ybslda.mp3" controls={true} loop={true}>
 
       </audio>
