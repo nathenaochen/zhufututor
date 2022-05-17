@@ -33,6 +33,10 @@ const prodConfig = {
         })
     ],
     optimization: {
+      // usedExports: true, //确定每个模块下被使用的导出。生产模式下默认开启，其他模式下不开启。
+      // sideEffects: true,  //用于判断是否要支持第三方库中的package.json中的sideEffects字段
+      providedExports: false,   //将 optimization.providedExports 配置为 false（方法名称不会被缩写），确定每个模块的导出，用于其他优化或代码生成。默认所有模式都开启；
+      // concatenateModules: false,  //  optimization.concatenateModules 也配置为 false（多个 js 代码块不会被放到同一个方法中）
       splitChunks: {
         cacheGroups: {
           // baseReact: {
@@ -45,7 +49,7 @@ const prodConfig = {
             test: /node_modules/,
             name: 'vendor',
             chunks: 'all',
-            priority: -1,
+            priority: -10,
           }
         }
       },

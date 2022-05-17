@@ -1,7 +1,6 @@
-import React,{useState, useEffect, useRef,useLayoutEffect} from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import ReactDOM from "react-dom";
-import styles from './index.less'
-
+import styles from "./index.less";
 
 /**
  * 测试React15 生命周期代码用例
@@ -34,7 +33,7 @@ import styles from './index.less'
 //     }else{
 //       return false;
 //     }
-    
+
 //   }
 //   // 组件更新时调用
 //   componentWillUpdate(nextProps, nextState) {
@@ -141,7 +140,6 @@ import styles from './index.less'
 //     );
 //   }
 // }
-
 
 /**
  * 测试React16 生命周期代码用例
@@ -329,13 +327,11 @@ import styles from './index.less'
 //     console.log('子组件useeffect');
 //   })
 
-
 //   console.log('子组件return前');
 //   return (
 //     <div>子组件</div>
 //   )
 // }
-
 
 /**
  * 测试在hook中获取上一次的state和props
@@ -370,7 +366,6 @@ import styles from './index.less'
 
 //   return lastState.current;
 // }
-
 
 // function Example() {
 //   const [count, setCount] = useState(0);
@@ -434,7 +429,7 @@ import styles from './index.less'
 //         style={{backgroundColor: theme.background}}
 //       />
 //       </div>
-      
+
 //     );
 //   }
 // }
@@ -497,15 +492,15 @@ import styles from './index.less'
 
 // function App() {
 //   const [count, setCount] = useState(0);
-  
+
 //   useLayoutEffect(() => {
 //     // setTimeout(()=>{
-//     //   if (count === 0) {  
+//     //   if (count === 0) {
 //     //     const randomNum = 10 + Math.random()*200
 //     //     setCount(10 + Math.random()*200);
 //     //   }
 //     // },2000)
-//     if (count === 0) {  
+//     if (count === 0) {
 //       const randomNum = 10 + Math.random()*200
 //       setCount(10 + Math.random()*200);}
 //   }, [count]);
@@ -518,19 +513,19 @@ import styles from './index.less'
 function App() {
   return (
     <>
-     <div className={styles.box}>
+      <div className={styles.box}>
         <div className={styles.all}>all</div>
         <div className={styles.allNo}>all</div>
-     </div>
-     <div className={styles.box}>
+      </div>
+      <div className={styles.box}>
         <div className={styles.top}>top</div>
         <div className={styles.topNo}>top</div>
-     </div>
-     <div className={styles.box}>
+      </div>
+      <div className={styles.box}>
         <div className={styles.bottom}>bottom</div>
         <div className={styles.bottomNo}>bottom</div>
-     </div>
-   </>
+      </div>
+    </>
   );
 }
 
