@@ -477,21 +477,21 @@
 /**
  * 用setTimeout实现setInterval 和 clearInterval
  */
-// function _setInterVal(fn,time){
-//   let id = {};
-//   function setFn(){
-//     id.target && clearTimeout(id.target);
-//     fn();
-//     id.tartget = setTimeout(setFn,time);
-//   }
-//   id.target = setTimeout(setFn,time);
-//   return id;
-// }
-// let returnId = _setInterVal(()=>{console.log('111')},1000);
+  // function _setInterVal(fn,time){
+  //   let id = {};
+  //   function setFn(){
+  //     id.target && clearTimeout(id.target);
+  //     fn();
+  //     id.tartget = setTimeout(setFn,time);
+  //   }
+  //   id.target = setTimeout(setFn,time);
+  //   return id;
+  // }
+  // let returnId = _setInterVal(()=>{console.log('111')},1000);
 
-// function _clearInterval(id){
-//   clearTimeout(id);
-// }
+  // function _clearInterval(id){
+  //   clearTimeout(id);
+  // }
 
 // setTimeout(()=>{_clearInterval(returnId.tartget)},10100);
 
@@ -671,16 +671,204 @@
 /**
  * 实现函数的柯里化
  */
-function curry(fn){
-  return function curried(){
-    let argus = Array.prototype.slice.call(arguments);
-    if(argus.length >= fn.length){
-      return fn.apply(this,argus);
+// function curry(fn){
+//   return function curried(){
+//     let argus = Array.prototype.slice.call(arguments);
+//     if(argus.length >= fn.length){
+//       return fn.apply(this,argus);
+//     }else{
+//       return function(){
+//         let argus_2 = Array.prototype.slice.call(arguments);
+//         return curried.apply(this,argus.concat(argus_2));
+//       }
+//     }
+//   }
+// }
+
+function moneyFormat(number, decimals = '2', dec_point = '.', thousands_sep = ',') {
+  //对参数的合法性做校验
+  if(number === null || number === undefined || number === '') return '';
+  number = (number + '').replace(/[^0-9+-Ee.]/g, '');
+  let n = !isFinite(+number) ? 0 : +number;
+      prec = !isFinite(+decimals) ? 0 : Math.abs(decimals);
+      dec = (typeof dec_point === 'undefined') ? '.' : dec_point;
+      sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep;
+      str = '',
+      toFixedNum = function(num,prec) {
+        let k = Math.pow(10,prec);
+        return '' + Math.round(num * k) / k;
+      };
+      str = (prec ? toFixedNum(n,prec) : '' + Math.round(n)).split('.');
+      //处理千分位
+      let re = /(-?\d+)(\d{3})/;
+      while(re.test(str[0])){
+        str[0] = str[0].replace(re,"$1" + sep + "$2");
+      }
+      if((str[1] || '').length < +prec){
+        str[1] = str[1] || ''
+        str[1] += new Array(prec - str[1].length + 1).join('0');
+      }
+      return str.join(dec);
+}
+
+function money(number,des = 2,sap = ','){
+  //匹配出0-9和.以外的其他字符，限定输入的number只能包含数字和点，否则判定为不合法
+  let reg = /[^0-9.]/
+  //对参数的合法性做校验
+  if(number === null || number === undefined || number === '' || isNaN(number) || reg.test(number)) return '--';
+  function toFixedNum(num,des){
+    let k = Math.pow(10,des);
+    let res = Math.round(num * k) / k + '';
+    return res.split('.');
+  }
+  let res = toFixedNum(number,Math.abs(des));
+  let re = /(\d)(?=(\d{3})+$)/g;
+  let str = res[0].replace(re,'$1,');
+  return str + '.' + (res[1] ? res[1] : '00');
+}
+
+console.log(moneyFormat('125343432445'),'==',money('125343432445'));
+
+// function trrottle(fn,time = 500){
+//   let off = true;
+//   return function(){
+//     if(!off) return;
+//     off = false;
+//     let id = setTimeout(() => {
+//       fn.apply(this,arguments);
+//       off = true;
+//       clearTimeout(id);
+//     }, time);
+//   }
+// }
+/*
+class myEventEmitter{
+   constructor(){
+     this.eventMap = {};
+   }
+   on(eventName,cb){
+    if(typeof cd != 'function'){
+      throw new Error('hander must be a function');
+    }
+    if(this.eventMap[eventName]){
+      this.eventMap[eventName].push(cb);
     }else{
-      return function(){
-        let argus_2 = Array.prototype.slice.call(arguments);
-        return curried.apply(this,argus.concat(argus_2));
+      this.eventMap[eventName] = [];
+      this.eventMap[eventName].push(cb)
+    }
+   }
+
+   emit(eventName,params){
+    if(this.eventMap[eventName]){
+      this.eventMap[eventName].forEach((cb)=>{
+        cb(params);
+      })
+    }
+   }
+
+   off(eventName,hander){
+    if(this.eventMap[eventName]){
+      let id = this.eventMap[eventName].indexOf(hander);
+      if(id != -1){
+        this.eventMap[eventName].splice(id,1);
       }
     }
+   }
+}
+
+function _setInterVal(fn,time){
+  let res = {
+    id: '',
+  };
+  function setFn(){
+    res.id && clearTimeout(res.id)
+    fn();
+    res.id = setTimeout(setFn, time);
   }
+  res.id = setTimeout(setFn, time);
+  return id;
+}
+*/
+
+/*
+function myNew(conCb,...argu){
+  let obj = {};
+  obj.__proto__ = conCb.prototype;
+  const res = conCb.apply(obj,argu);
+  return typeof res === 'object' ? res : obj;
+}
+function Person(p){this.a=1; return p;};
+console.log(myNew(Person,{}));
+*/
+
+// Function.prototype.myCall = function(point,...argus){
+//   point = point || window;
+//   if(typeof this !== 'function' || typeof point !== 'object'){return ;}
+//   point.self = this;
+//   let res = eval('point.self('+argus+')');
+//   delete point.self;
+//   return res;
+// }
+
+Function.prototype.myApply = function(point,args){
+  point = point || window;
+  if(typeof this !== 'function' || typeof point !== 'object') return;
+  point.self = this;
+  const res = eval('point.self('+args+')');
+  delete point.self;
+  return res;
+}
+
+let obj = {a:8};
+function fn(a,b,c) {
+  console.log(this.a,1);
+  console.log(a);
+  console.log(b);
+  console.log(c);
+  return 9999;
+}
+console.log(fn.myCall(obj,1,2,3));
+
+xml.onreadtystatechange=function(){
+  xml.readyState === 4 && xml.status == 200
+}
+
+function ajax(args){
+  let argsDefault = {
+    url:'',
+    method: 'GET',
+    data: '',
+    async: true,
+    success:function(){
+
+    },
+    error:function(){
+
+    }
+  }
+
+  for(let key in args) argsDefault[key] = args[key]
+
+  let xml = new XMLHttpRequest();
+  if(argsDefault['method'].toUpperCase() === 'GET' && typeof data === 'undefiend'){
+    url = url + '?' + data
+  }
+  xml.open(argsDefault['method'],);
+  xml.send(data);
+}
+
+function sort(arr,p,q){
+  let i = p, j = q, point = arr[p];
+  if(p < q){
+    while(i < j){
+      while(i < j && arr[j] >= point ) j--;
+      arr[i] = arr[j];
+      while(i < j && arr[i] <= point) i++;
+      arr[j] = arr[i];
+    }
+    arr[i] = point;
+    if(p+1 < i) sort(arr,p,i-1);
+    if(i+1 < p) sort(arr,i+1,p);
+  }
+
 }

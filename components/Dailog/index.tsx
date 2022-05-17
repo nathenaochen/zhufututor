@@ -10,9 +10,9 @@ interface BtnAttr {
   text: string;   //按钮文字
   action: Function; //点击按钮执行的方法
 }
-interface DailogProps {
+interface DailogProps<T> {
   visable: boolean;  //控制Diolog的展示与隐藏
-  message?: string;   //弹框提示内容
+  message?: T;   //弹框提示内容
   btns?: BtnAttr[];    //按钮列表
   className?: string;  //外传控制class
   title?: string;      //弹框标题
@@ -23,7 +23,7 @@ const doc = window.document;
 const node = doc.createElement('div');
 doc.body.appendChild(node);
 
-const Dailog: FunctionComponent<DailogProps> = (props:DailogProps) => {
+const Dailog: FunctionComponent<DailogProps<string>> = (props:DailogProps<string>) => {
   const {className,visable,message,btns,title, children} = props; 
   
   // return (

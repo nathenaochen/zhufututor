@@ -55,6 +55,7 @@ const baseConfig = {
             constant:path.resolve(BASE_PATH,'./constant'),
             interface:path.resolve(BASE_PATH,'./interface'),
             utils: path.resolve(BASE_PATH,'./utils'),
+            common: path.resolve(BASE_PATH,'./common'),
         },
         extensions:['.js','.ts','.tsx'],
     },

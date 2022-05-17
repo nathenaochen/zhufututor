@@ -1,5 +1,6 @@
-import React,{useState, useEffect, useRef} from "react";
+import React,{useState, useEffect, useRef,useLayoutEffect} from "react";
 import ReactDOM from "react-dom";
+import styles from './index.less'
 
 
 /**
@@ -401,4 +402,136 @@ import ReactDOM from "react-dom";
 
 // console.log(Example);
 
-ReactDOM.render(<Example />, document.getElementById("root"));
+// const themes = {
+//   light: {
+//     foreground: '#000000',
+//     background: '#eeeeee',
+//   },
+//   dark: {
+//     foreground: '#ffffff',
+//     background: '#222222',
+//   },
+// };
+
+// const ThemeContext = React.createContext(
+//   themes.dark // default value
+// );
+
+// class ThemedButton extends React.Component {
+//   render() {
+//     let props = this.props;
+//     let theme = this.context;
+//     console.log(props,theme,'ppp');
+//     return (
+//       <div>
+//          {/* <ThemeContext.Consumer>
+//           {
+//             value => <p>{value.background}</p>
+//           }
+//         </ThemeContext.Consumer> */}
+//         <button
+//         {...props}
+//         style={{backgroundColor: theme.background}}
+//       />
+//       </div>
+      
+//     );
+//   }
+// }
+// ThemedButton.contextType = ThemeContext;
+
+// function A(){
+//   return (
+//     <div>
+//       <ThemeContext.Consumer>
+//           {
+//             value => <p>{value.background}</p>
+//           }
+//         </ThemeContext.Consumer>
+//     </div>
+//   )
+// }
+
+// function Toolbar(props) {
+//   return (
+//     <ThemedButton onClick={props.changeTheme}>
+//       Change Them
+//     </ThemedButton>
+//   );
+// }
+
+// class App extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       theme: themes.light,
+//     };
+//   }
+
+//   toggleTheme = () => {console.log(111,this.state);
+//     this.setState(state => ({
+//       theme:
+//         state.theme === themes.dark
+//           ? themes.light
+//           : themes.dark,
+//     }));
+//   };
+
+//   render() {
+//     // The ThemedButton button inside the ThemeProvider
+//     // uses the theme from state while the one outside uses
+//     // the default dark theme
+//     return (
+//       <div>
+//         <ThemeContext.Provider value={this.state.theme}>
+//           <Toolbar changeTheme={this.toggleTheme} />
+//           <A />
+//         </ThemeContext.Provider>
+//         <div>
+//           <ThemedButton>2323</ThemedButton>
+//         </div>
+//       </div>
+//     );
+//   }
+// }
+
+// function App() {
+//   const [count, setCount] = useState(0);
+  
+//   useLayoutEffect(() => {
+//     // setTimeout(()=>{
+//     //   if (count === 0) {  
+//     //     const randomNum = 10 + Math.random()*200
+//     //     setCount(10 + Math.random()*200);
+//     //   }
+//     // },2000)
+//     if (count === 0) {  
+//       const randomNum = 10 + Math.random()*200
+//       setCount(10 + Math.random()*200);}
+//   }, [count]);
+
+//   return (
+//       <div onClick={() => setCount(0)}>{count}</div>
+//   );
+// }
+
+function App() {
+  return (
+    <>
+     <div className={styles.box}>
+        <div className={styles.all}>all</div>
+        <div className={styles.allNo}>all</div>
+     </div>
+     <div className={styles.box}>
+        <div className={styles.top}>top</div>
+        <div className={styles.topNo}>top</div>
+     </div>
+     <div className={styles.box}>
+        <div className={styles.bottom}>bottom</div>
+        <div className={styles.bottomNo}>bottom</div>
+     </div>
+   </>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById("root"));
