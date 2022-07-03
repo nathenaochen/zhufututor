@@ -15,7 +15,7 @@ import styles from "./index.less";
 //   }
 //   // 初始化渲染时调用
 //   componentWillMount() {
-//     console.log("子组件componentWillMount方法执行");
+//     console.log("子组件componentWillMount方法执行 ");
 //   }
 //   // 初始化渲染时调用
 //   componentDidMount() {
